@@ -1,0 +1,11 @@
+{
+  "name": "وبسایت دکتر علیرضا کریمی | متخصص ارتودنسی",
+  "description": "وب‌سایت رسمی دکتر علیرضا کریمی، متخصص ارتودنسی و ناهنجاری‌های فکی در تهران. مشاهده خدمات، نمونه درمان‌ها، مراکز درمانی و رزرو نوبت آنلاین.",
+  "requestFramePermissions": [
+    "geolocation",
+    "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
