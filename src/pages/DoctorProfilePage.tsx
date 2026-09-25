@@ -134,6 +134,14 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
                 <span className="text-slate-300">{doctor.experienceYears} سال سابقه درمان</span>
                 <span className="text-slate-400">•</span>
                 <span className="text-slate-300">شهر: {doctor.city}</span>
+                {(doctor.hospitalName || (doctor.hospitals && doctor.hospitals.length > 0)) && (
+                  <>
+                    <span className="text-slate-400">•</span>
+                    <span className="text-blue-300 flex items-center gap-1 font-bold">
+                      🏥 {doctor.hospitalName || doctor.hospitals?.[0]}
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Doctor } from '../../types';
-import { MapPin, Clock, Video, Shield, Calendar, ArrowLeft, Globe, ExternalLink } from 'lucide-react';
+import { MapPin, Clock, Video, Shield, Calendar, ArrowLeft, Globe, ExternalLink, Building2 } from 'lucide-react';
 import { Rating } from '../common/Rating';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
@@ -86,6 +86,18 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, onQuic
               {doctor.province ? `${doctor.province}، ${doctor.city}` : doctor.city} - {doctor.address.split('،')[0]}
             </span>
           </div>
+
+          {(doctor.hospitalName || (doctor.hospitals && doctor.hospitals.length > 0)) && (
+            <div className="flex items-center justify-between text-slate-600 gap-2">
+              <span className="flex items-center gap-1 text-slate-500 shrink-0">
+                <Building2 className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
+                بیمارستان همکار:
+              </span>
+              <span className="font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200/60 truncate text-left text-[11px]">
+                {doctor.hospitalName || doctor.hospitals?.[0]}
+              </span>
+            </div>
+          )}
 
           <div className="flex items-center justify-between text-slate-600 gap-2">
             <span className="flex items-center gap-1 text-slate-500 shrink-0">

@@ -35,7 +35,8 @@ import {
   TaskStatus,
   TaskPriority,
   TaskType,
-  ClinicBrandingRequest
+  ClinicBrandingRequest,
+  Hospital
 } from '../types';
 import { appointmentAvailabilityService } from './appointmentAvailabilityService';
 import { queueService } from './queueService';
@@ -93,7 +94,8 @@ import {
   MOCK_AUTOMATION_RULES,
   MOCK_NOTIFICATIONS,
   MOCK_DOCTOR_CLINIC_MEMBERSHIPS,
-  MOCK_INSURANCES
+  MOCK_INSURANCES,
+  MOCK_HOSPITALS
 } from '../data/mockData';
 
 import {
@@ -637,7 +639,13 @@ export const apiService = {
           d.name.toLowerCase().includes(query) ||
           d.specialtyName.toLowerCase().includes(query) ||
           d.title.toLowerCase().includes(query) ||
-          d.services.some(s => s.toLowerCase().includes(query))
+          d.services.some(s => s.toLowerCase().includes(query)) ||
+          (d.hospitalName && d.hospitalName.toLowerCase().includes(query)) ||
+          (d.hospitals && d.hospitals.some(h => h.toLowerCase().includes(query))) ||
+          (d.clinicName && d.clinicName.toLowerCase().includes(query)) ||
+          (d.address && d.address.toLowerCase().includes(query)) ||
+          (d.bio && d.bio.toLowerCase().includes(query)) ||
+          (d.offices && d.offices.some(o => o.title.toLowerCase().includes(query) || o.address.toLowerCase().includes(query)))
       );
     }
 
@@ -1439,6 +1447,25 @@ export const apiService = {
     await delay(20);
     const branches = await this.getBranches();
     return branches.find(b => b.id === branchId || b.code === branchId);
+  },
+
+  async getHospitals(query?: string): Promise<Hospital[]> {
+    await delay(20);
+    if (!query || !query.trim()) return MOCK_HOSPITALS;
+    const q = query.trim().toLowerCase();
+    return MOCK_HOSPITALS.filter(
+      h =>
+        h.name.toLowerCase().includes(q) ||
+        h.city.toLowerCase().includes(q) ||
+        h.district.toLowerCase().includes(q) ||
+        h.address.toLowerCase().includes(q) ||
+        h.departments.some(d => d.toLowerCase().includes(q))
+    );
+  },
+
+  async getHospitalById(id: string): Promise<Hospital | undefined> {
+    await delay(20);
+    return MOCK_HOSPITALS.find(h => h.id === id || h.slug === id);
   },
 
   async getNearestBranches(userLat: number, userLng: number): Promise<Array<ClinicBranch & { distanceKm: number }>> {

@@ -342,42 +342,18 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
         .hero-banner {
           position: relative;
           overflow: hidden;
-          background-color: #f1f6fa;
-          background-size: cover;
-          background-position: right center;
-          background-repeat: no-repeat;
-          min-height: 600px;
+          background: #f1f6fa;
         }
         .hero-banner-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0.94) 0%,
-            rgba(255, 255, 255, 0.85) 36%,
-            rgba(255, 255, 255, 0.45) 54%,
-            rgba(255, 255, 255, 0.08) 68%,
-            transparent 76%
-          );
-          pointer-events: none;
-          z-index: 1;
-        }
-        @media(max-width:1024px){
-          .hero-banner-overlay {
-            background: linear-gradient(
-              180deg,
-              rgba(255, 255, 255, 0.98) 0%,
-              rgba(255, 255, 255, 0.92) 55%,
-              rgba(255, 255, 255, 0.5) 100%
-            );
-          }
+          display: none;
         }
         .doctor-hero-photo {
-          height: 585px;
-          width: min(100%, 540px);
+          width: 100%;
+          max-width: 580px;
+          height: auto;
           object-fit: cover;
-          object-position: right center;
-          filter: saturate(1.05) contrast(1.02);
+          border-radius: 1.25rem;
+          box-shadow: 0 12px 30px -6px rgba(5, 38, 63, 0.12), 0 8px 12px -6px rgba(5, 38, 63, 0.06);
         }
         .wave-decor {
           display: none;
@@ -388,8 +364,8 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
             min-height: auto;
           }
           .doctor-hero-photo {
-            height: 440px;
-            width: 360px;
+            max-width: 100%;
+            height: auto;
           }
         }
         @media(max-width:600px){
@@ -704,19 +680,12 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
       {/* Main Content */}
       <main id="home">
         {/* Hero Section */}
-        <section 
-          className="hero-banner relative"
-          style={{ backgroundImage: `url(${drGhorashiSentPhotoBg})` }}
-        >
-          {/* Subtle daylight clinic gradient wash overlay */}
-          <div className="hero-banner-overlay" />
-
-          <div className="container-custom min-h-[590px] grid grid-cols-1 lg:grid-cols-12 items-center relative z-10 hero-grid pt-4 md:pt-6">
-            {/* Doctor Column (RIGHT side on desktop: Col 1-6 in RTL) - Unified single image matching reference photo */}
-            <div className="lg:col-span-6 order-2 lg:order-1 h-full min-h-[320px] lg:min-h-[580px] flex items-end justify-center relative select-none">
-              {/* On mobile and tablet: Full-width photographic portrait of doctor in his clinic with diploma, badge & plant */}
+        <section className="hero-banner relative bg-gradient-to-b from-[#f8fafc] via-[#f1f6fa] to-[#edf3f8] py-8 lg:py-14 border-b border-slate-100">
+          <div className="container-custom grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-12 relative z-10 hero-grid">
+            {/* Doctor Column (RIGHT side on desktop: Col 1-6 in RTL) - Clean unedited photo */}
+            <div className="lg:col-span-6 order-2 lg:order-1 flex items-center justify-center relative select-none">
               <img 
-                className="doctor-hero-photo relative z-10 w-full max-w-[480px] h-[340px] sm:h-[420px] lg:hidden object-cover object-right rounded-2xl shadow-xl border border-white/60 my-4" 
+                className="doctor-hero-photo w-full max-w-[580px] h-auto object-cover rounded-2xl shadow-xl border border-white" 
                 src={drGhorashiSentPhotoBg}
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/assets/dr-ghorashi-hero-bg.jpg';
@@ -724,19 +693,10 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                 alt="دکتر سعید قریشی متخصص ارتودنسی" 
                 referrerPolicy="no-referrer"
               />
-
-              {/* On desktop: Semantic image element anchoring the unified 16:9 banner photo */}
-              <img 
-                className="doctor-hero-photo hidden lg:block relative z-10 w-full max-w-[540px] h-[585px] object-cover object-right pointer-events-none opacity-0" 
-                src={drGhorashiSentPhotoBg}
-                alt="دکتر سعید قریشی متخصص ارتودنسی" 
-                referrerPolicy="no-referrer"
-                aria-hidden="true"
-              />
             </div>
 
             {/* Text Column (LEFT side on desktop: Col 7-12 in RTL) */}
-            <div className="lg:col-span-6 order-1 lg:order-2 py-6 sm:py-10 max-w-[560px] mx-auto text-center flex flex-col items-center justify-center">
+            <div className="lg:col-span-6 order-1 lg:order-2 py-4 sm:py-6 max-w-[560px] mx-auto text-center flex flex-col items-center justify-center">
               {/* Golden Subtitle */}
               <div className="text-[#c79a32] font-black text-sm sm:text-[15.5px] mb-2 tracking-normal">
                 متخصص ارتودنسی و ناهنجاری‌های فکی

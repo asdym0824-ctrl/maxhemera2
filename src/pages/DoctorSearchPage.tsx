@@ -8,6 +8,7 @@ import { DoctorCompactCard } from '../components/doctors/DoctorCompactCard';
 import { DoctorFilterSidebar } from '../components/doctors/DoctorFilterSidebar';
 import { MobileSpecialtiesModal } from '../components/specialties/MobileSpecialtiesModal';
 import { IRAN_PROVINCES } from '../data/provinces';
+import { MOCK_HOSPITALS } from '../data/mockData';
 import { 
   Search, 
   SlidersHorizontal, 
@@ -19,7 +20,8 @@ import {
   CheckCircle2, 
   X,
   Stethoscope,
-  MapPin
+  MapPin,
+  Building2
 } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { MedicalLoadingIndicator } from '../components/common/MedicalLoadingIndicator';
@@ -73,6 +75,26 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
   const displayedDoctors = useMemo(() => {
     return doctors.slice(0, visibleDoctorsCount);
   }, [doctors, visibleDoctorsCount]);
+
+  const matchedHospital = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+    const q = searchQuery.toLowerCase().trim();
+    return MOCK_HOSPITALS.find(h =>
+      h.name.toLowerCase().includes(q) ||
+      q.includes(h.name.toLowerCase()) ||
+      (h.slug && q.includes(h.slug))
+    ) || null;
+  }, [searchQuery]);
+
+  const matchedSpecialty = useMemo(() => {
+    if (!searchQuery.trim()) return null;
+    const q = searchQuery.toLowerCase().trim();
+    return specialties.find(s =>
+      s.name.toLowerCase().includes(q) ||
+      q.includes(s.name.toLowerCase()) ||
+      (s.englishName && s.englishName.toLowerCase().includes(q))
+    ) || null;
+  }, [specialties, searchQuery]);
 
   useEffect(() => {
     setVisibleDoctorsCount(6);
@@ -198,7 +220,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
             type="text"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            placeholder="نام پزشک، فوق تخصص یا خدمت مورد نظر..."
+            placeholder="نام پزشک، بیمارستان، فوق تخصص یا خدمت مورد نظر..."
             className="flex-1 text-xs sm:text-sm bg-transparent outline-hidden font-medium text-slate-900 placeholder-slate-400"
           />
           <button
@@ -379,6 +401,104 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
 
         {/* Doctor Grid Results */}
         <div className="lg:col-span-3 space-y-4">
+          {/* Matched Hospital Spotlight Card */}
+          {matchedHospital && (
+            <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border border-blue-700/50 mb-2 animate-in fade-in flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-2.5 bg-blue-600/40 rounded-xl border border-blue-400/30 text-white shrink-0">
+                    <Building2 className="w-5 h-5 text-blue-200" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-extrabold text-base sm:text-lg text-white truncate">{matchedHospital.name}</h3>
+                      <span className="text-[10px] bg-blue-500/30 text-blue-200 px-2 py-0.5 rounded-full border border-blue-400/30 font-medium">
+                        {matchedHospital.type}
+                      </span>
+                    </div>
+                    <p className="text-xs text-blue-200 flex items-center gap-1 mt-0.5 truncate">
+                      <MapPin className="w-3.5 h-3.5 text-blue-300 shrink-0" />
+                      <span>{matchedHospital.district} - {matchedHospital.address}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5 text-xs pt-1">
+                  <span className="text-slate-300 text-[11px]">بخش‌های همکار:</span>
+                  {matchedHospital.departments.slice(0, 4).map((d, i) => (
+                    <span key={i} className="bg-white/10 px-2 py-0.5 rounded-md text-[10px] text-white">
+                      {d}
+                    </span>
+                  ))}
+                  {matchedHospital.phone && (
+                    <span className="text-[11px] text-blue-300 mr-2 flex items-center gap-1">
+                      <span>تلفن: {matchedHospital.phone}</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+                <span className="text-xs text-emerald-300 bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-400/30 font-bold whitespace-nowrap">
+                  {doctors.length} پزشک مرتبط یافت شد
+                </span>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="p-1.5 text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 rounded-xl cursor-pointer"
+                  title="پاک کردن جستجو"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Matched Specialty Spotlight Card */}
+          {matchedSpecialty && !matchedHospital && (
+            <div className="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 text-white rounded-2xl p-4 sm:p-5 shadow-lg border border-emerald-700/50 mb-2 animate-in fade-in flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1.5 min-w-0">
+                <div className="flex items-center gap-2.5">
+                  <span className="p-2.5 bg-emerald-600/40 rounded-xl border border-emerald-400/30 text-white shrink-0">
+                    <Stethoscope className="w-5 h-5 text-emerald-200" />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-extrabold text-base sm:text-lg text-white truncate">{matchedSpecialty.name}</h3>
+                      {matchedSpecialty.englishName && (
+                        <span className="text-[10px] bg-emerald-500/30 text-emerald-200 font-mono px-2 py-0.5 rounded-full border border-emerald-400/30">
+                          {matchedSpecialty.englishName}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-emerald-200 flex items-center gap-1 mt-0.5 truncate">
+                      <span>{matchedSpecialty.description}</span>
+                    </p>
+                  </div>
+                </div>
+                {matchedSpecialty.popularSymptoms && matchedSpecialty.popularSymptoms.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 text-xs pt-1">
+                    <span className="text-slate-300 text-[11px]">علائم شایع مراجعه:</span>
+                    {matchedSpecialty.popularSymptoms.map((s, i) => (
+                      <span key={i} className="bg-white/10 px-2 py-0.5 rounded-md text-[10px] text-white">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+                <span className="text-xs text-emerald-300 bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-400/30 font-bold whitespace-nowrap">
+                  {doctors.length} متخصص آماده ویزیت
+                </span>
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="p-1.5 text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 rounded-xl cursor-pointer"
+                  title="پاک کردن جستجو"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium pb-2 border-b border-slate-200/80">
             <div className="flex items-center gap-2 flex-wrap">
               <span>

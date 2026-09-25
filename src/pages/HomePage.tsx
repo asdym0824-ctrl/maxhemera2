@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Doctor, Specialty, ServiceItem, HealthArticle, ClinicBranch } from '../types';
+import { Doctor, Specialty, ServiceItem, HealthArticle, ClinicBranch, Hospital } from '../types';
 import { setSeoMetaData } from '../utils/seoUtils';
 import { apiService } from '../services/apiService';
+import { MOCK_HOSPITALS } from '../data/mockData';
 import { 
   Search, 
   ShieldCheck, 
@@ -112,11 +113,21 @@ export const HomePage: React.FC<HomePageProps> = ({
         setIsSearchFocused(false);
       }
     };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsSearchFocused(false);
+      }
+    };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, []);
 
   const handleSelectDoctor = (slug: string) => {
+    setIsSearchFocused(false);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     if (onSelectDoctor) {
       onSelectDoctor(slug);
@@ -125,6 +136,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const handleQuickBookDoctor = (slug: string) => {
+    setIsSearchFocused(false);
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     if (onSelectDoctor) {
       onSelectDoctor(slug);
@@ -141,6 +153,41 @@ export const HomePage: React.FC<HomePageProps> = ({
     }
   };
 
+  const handleSelectHospital = (hosp: Hospital) => {
+    setIsSearchFocused(false);
+    navigate(`/doctors?search=${encodeURIComponent(hosp.name)}`);
+  };
+
+  const handleSelectSpecialty = (spec: Specialty) => {
+    setIsSearchFocused(false);
+    navigate(`/specialties/${spec.slug}`);
+  };
+
+  // Instant autocomplete matched specialties
+  const liveMatchedSpecialties = useMemo(() => {
+    if (!heroSearchQuery.trim() || heroSearchQuery.length < 2) return [];
+    const q = heroSearchQuery.toLowerCase().trim();
+    return specialties.filter(spec =>
+      spec.name.toLowerCase().includes(q) ||
+      (spec.englishName && spec.englishName.toLowerCase().includes(q)) ||
+      (spec.description && spec.description.toLowerCase().includes(q)) ||
+      (spec.popularSymptoms && spec.popularSymptoms.some(s => s.toLowerCase().includes(q)))
+    ).slice(0, 4);
+  }, [specialties, heroSearchQuery]);
+
+  // Instant autocomplete matched hospitals
+  const liveMatchedHospitals = useMemo(() => {
+    if (!heroSearchQuery.trim() || heroSearchQuery.length < 2) return [];
+    const q = heroSearchQuery.toLowerCase().trim();
+    return MOCK_HOSPITALS.filter(h =>
+      h.name.toLowerCase().includes(q) ||
+      h.city.toLowerCase().includes(q) ||
+      h.district.toLowerCase().includes(q) ||
+      h.address.toLowerCase().includes(q) ||
+      h.departments.some(d => d.toLowerCase().includes(q))
+    ).slice(0, 4);
+  }, [heroSearchQuery]);
+
   // Instant autocomplete matched doctors
   const liveMatchedDoctors = useMemo(() => {
     if (!heroSearchQuery.trim() || heroSearchQuery.length < 2) return [];
@@ -149,7 +196,11 @@ export const HomePage: React.FC<HomePageProps> = ({
       doc.name.toLowerCase().includes(q) ||
       doc.specialtyName.toLowerCase().includes(q) ||
       (doc.title && doc.title.toLowerCase().includes(q)) ||
-      (doc.services && doc.services.some(s => s.toLowerCase().includes(q)))
+      (doc.services && doc.services.some(s => s.toLowerCase().includes(q))) ||
+      (doc.hospitalName && doc.hospitalName.toLowerCase().includes(q)) ||
+      (doc.hospitals && doc.hospitals.some(h => h.toLowerCase().includes(q))) ||
+      (doc.clinicName && doc.clinicName.toLowerCase().includes(q)) ||
+      (doc.address && doc.address.toLowerCase().includes(q))
     ).slice(0, 4);
   }, [doctors, heroSearchQuery]);
 
@@ -178,13 +229,14 @@ export const HomePage: React.FC<HomePageProps> = ({
   }, [totalMatchingDoctors, visibleDoctorsCount]);
 
   const quickChips = [
+    { label: 'بیمارستان بقیه‌الله', query: 'بیمارستان بقیه‌الله' },
+    { label: 'بیمارستان لاله', query: 'بیمارستان لاله' },
+    { label: 'بیمارستان دی', query: 'بیمارستان دی' },
     { label: 'متخصص قلب و عروق', query: 'قلب' },
     { label: 'پوست، مو و زیبایی', query: 'پوست' },
     { label: 'زنان و زایمان', query: 'زنان' },
-    { label: 'کودکان و اطفال', query: 'اطفال' },
-    { label: 'روانپزشکی و اعصاب', query: 'روان' },
     { label: 'ارتوپدی و مفاصل', query: 'ارتوپدی' },
-    { label: 'چکاپ کامل سلامت', query: 'چکاپ' }
+    { label: 'بیمارستان میلاد', query: 'بیمارستان میلاد' }
   ];
 
   const popularInsurances = [
@@ -277,22 +329,24 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* ======================================================== */}
       {/* 1. HERO SECTION & SMART INTERACTIVE SEARCH HUB */}
       {/* ======================================================== */}
-      <section className="relative pt-6 sm:pt-10 pb-10 sm:pb-14 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white rounded-3xl p-4 sm:p-10 overflow-hidden shadow-2xl border border-slate-800">
-        {/* Glow and Mesh Backdrop */}
-        <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 -left-32 w-80 h-80 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-20 right-1/3 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+      <section className="relative pt-6 sm:pt-10 pb-10 sm:pb-14 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white rounded-3xl p-4 sm:p-10 shadow-2xl border border-slate-800">
+        {/* Glow, Watermarks and Mesh Backdrop - strictly contained within rounded borders */}
+        <div className="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none">
+          <div className="absolute -top-32 -right-32 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 -left-32 w-80 h-80 bg-sky-500/15 rounded-full blur-3xl" />
+          <div className="absolute -bottom-20 right-1/3 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
 
-        {/* Abstract Medical DNA Helix Watermarks */}
-        <DnaHelixWatermark className="w-48 sm:w-64 h-[420px] -left-10 -top-8 rotate-12" opacity="opacity-[0.14]" />
-        <DnaHelixWatermark className="hidden md:block w-48 sm:w-64 h-[420px] -right-12 -bottom-16 -rotate-12" opacity="opacity-[0.09]" />
+          {/* Abstract Medical DNA Helix Watermarks */}
+          <DnaHelixWatermark className="w-48 sm:w-64 h-[420px] -left-10 -top-8 rotate-12" opacity="opacity-[0.14]" />
+          <DnaHelixWatermark className="hidden md:block w-48 sm:w-64 h-[420px] -right-12 -bottom-16 -rotate-12" opacity="opacity-[0.09]" />
 
-        {/* Matte Medical Vectors Pattern (Stethoscope, Cross, Syringe, Heartbeat) */}
-        <MedicalVectorPattern opacity={0.065} variant="light" patternId="hero-med-pattern" />
+          {/* Matte Medical Vectors Pattern (Stethoscope, Cross, Syringe, Heartbeat) */}
+          <MedicalVectorPattern opacity={0.065} variant="light" patternId="hero-med-pattern" />
 
-        {/* Swiss Clinical Cross Markers in Hero Corners */}
-        <div className="absolute top-4 left-4 text-xs font-mono text-sky-400/30 select-none pointer-events-none">+ +</div>
-        <div className="absolute bottom-4 right-4 text-xs font-mono text-sky-400/30 select-none pointer-events-none">+ +</div>
+          {/* Swiss Clinical Cross Markers in Hero Corners */}
+          <div className="absolute top-4 left-4 text-xs font-mono text-sky-400/30 select-none">+ +</div>
+          <div className="absolute bottom-4 right-4 text-xs font-mono text-sky-400/30 select-none">+ +</div>
+        </div>
 
         <div className="relative z-10 max-w-4xl mx-auto space-y-6 sm:space-y-8">
           
@@ -389,7 +443,7 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* TAB 1: Doctor Search & Live Autocomplete */}
           {activeHeroTab === 'doctor' && (
-            <div className="space-y-4" ref={searchContainerRef}>
+            <div className="space-y-4 relative z-30" ref={searchContainerRef}>
               <form onSubmit={handleSearchSubmit} className="relative max-w-2xl mx-auto">
                 <div className="flex items-center gap-1 sm:gap-1.5 bg-white rounded-2xl p-1.5 sm:p-2 shadow-2xl border border-slate-200 text-slate-800 focus-within:ring-4 focus-within:ring-blue-500/30 transition-all">
                   <Search className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 mr-2 sm:mr-3 shrink-0" />
@@ -398,7 +452,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     value={heroSearchQuery}
                     onChange={e => setHeroSearchQuery(e.target.value)}
                     onFocus={() => setIsSearchFocused(true)}
-                    placeholder="جستجوی پزشک، تخصص یا بیماری..."
+                    placeholder="جستجوی پزشک، تخصص، نام بیمارستان یا بیماری..."
                     className="flex-1 min-w-0 text-xs sm:text-sm bg-transparent outline-hidden font-medium text-slate-900 placeholder-slate-400 py-1"
                   />
                   {heroSearchQuery && (
@@ -430,46 +484,251 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 {/* Instant Autocomplete Suggestions Dropdown */}
-                {isSearchFocused && liveMatchedDoctors.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden z-50 animate-in fade-in-50 text-slate-900 text-right">
-                    <div className="px-4 py-2 bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-500 flex items-center justify-between">
-                      <span>پزشکان یافت شده ({liveMatchedDoctors.length})</span>
-                      <span className="text-[10px] text-blue-600">انتخاب جهت نوبت‌دهی فوری</span>
-                    </div>
-                    <div className="divide-y divide-slate-100 max-h-60 overflow-y-auto">
-                      {liveMatchedDoctors.map(doc => (
-                        <div
-                          key={doc.id}
-                          onClick={() => handleSelectDoctor(doc.slug)}
-                          className="p-3 hover:bg-blue-50/70 transition-colors flex items-center justify-between gap-3 cursor-pointer"
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <img
-                              src={doc.avatar}
-                              alt={doc.name}
-                              className="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0"
-                            />
-                            <div className="min-w-0">
-                              <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">{doc.name}</h4>
-                              <p className="text-[11px] text-slate-500 truncate">{doc.specialtyName}</p>
+                {isSearchFocused && heroSearchQuery.trim().length >= 2 && (
+                  <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-2xl border border-slate-200/90 z-50 animate-in fade-in-50 text-slate-900 text-right overflow-hidden ring-1 ring-black/5 divide-y divide-slate-100">
+                    
+                    {/* List of matches */}
+                    {(liveMatchedDoctors.length > 0 || liveMatchedHospitals.length > 0 || liveMatchedSpecialties.length > 0) && (
+                      <div className="max-h-[62vh] sm:max-h-[460px] overflow-y-auto overscroll-contain divide-y divide-slate-100">
+                        
+                        {/* 1. Specialties Section */}
+                        {liveMatchedSpecialties.length > 0 && (
+                          <div>
+                            <div className="sticky top-0 z-10 px-4 py-2 bg-gradient-to-r from-emerald-50 to-teal-50/70 border-b border-emerald-100 text-xs font-bold text-emerald-950 flex items-center justify-between backdrop-blur-xs">
+                              <span className="flex items-center gap-1.5">
+                                <Stethoscope className="w-4 h-4 text-emerald-600" />
+                                <span>تخصص‌های پزشکی یافت شده ({liveMatchedSpecialties.length})</span>
+                              </span>
+                              <span className="text-[10px] text-emerald-600">مشاهده دپارتمان و پزشکان</span>
+                            </div>
+                            <div className="divide-y divide-slate-100">
+                              {liveMatchedSpecialties.map(spec => (
+                                <div
+                                  key={spec.id}
+                                  onClick={() => handleSelectSpecialty(spec)}
+                                  className="p-3 hover:bg-emerald-50/70 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                                >
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-10 h-10 rounded-xl bg-emerald-100/80 text-emerald-700 flex items-center justify-center shrink-0 border border-emerald-200 group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-2xs">
+                                      <Stethoscope className="w-5 h-5" />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                        <h4 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
+                                          {spec.name}
+                                        </h4>
+                                        {spec.englishName && (
+                                          <span className="text-[10px] bg-slate-100 text-slate-500 font-mono px-1.5 py-0.5 rounded border border-slate-200 shrink-0">
+                                            {spec.englishName}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <p className="text-[11px] text-slate-500 truncate mt-0.5">
+                                        {spec.description}
+                                      </p>
+                                      {spec.popularSymptoms && spec.popularSymptoms.length > 0 && (
+                                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-slate-400 mt-0.5 truncate">
+                                          <span>علائم شایع:</span>
+                                          <span className="text-slate-600">{spec.popularSymptoms.slice(0, 3).join('، ')}</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    <span className="hidden sm:inline-block text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
+                                      {spec.doctorCount} پزشک متخصص
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSelectSpecialty(spec);
+                                      }}
+                                      className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                                      title="مشاهده پزشکان این تخصص"
+                                    >
+                                      <span>مشاهده پزشکان</span>
+                                      <ArrowLeft className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                          <div className="flex items-center gap-2 shrink-0">
-                            {doc.nextAvailableSlot && (
-                              <span className="hidden sm:inline-block text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
-                                نوبت خالی: {doc.nextAvailableSlot}
+                        )}
+
+                        {/* 2. Hospitals Section */}
+                        {liveMatchedHospitals.length > 0 && (
+                          <div>
+                            <div className="sticky top-0 z-10 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50/70 border-b border-blue-100 text-xs font-bold text-blue-900 flex items-center justify-between backdrop-blur-xs">
+                              <span className="flex items-center gap-1.5">
+                                <Building2 className="w-4 h-4 text-blue-600" />
+                                <span>بیمارستان‌ها و مراکز درمانی ({liveMatchedHospitals.length})</span>
                               </span>
-                            )}
-                            <button
-                              type="button"
-                              className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs"
-                            >
-                              رزرو نوبت
-                            </button>
+                              <span className="text-[10px] text-blue-600">مشاهده پزشکان و نوبت‌دهی</span>
+                            </div>
+                            <div className="divide-y divide-slate-100">
+                              {liveMatchedHospitals.map(hosp => (
+                                <div
+                                  key={hosp.id}
+                                  onClick={() => handleSelectHospital(hosp)}
+                                  className="p-3 hover:bg-blue-50/80 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                                >
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-blue-700 flex items-center justify-center shrink-0 border border-blue-200 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                                      <Building2 className="w-5 h-5" />
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                        <h4 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-blue-700 transition-colors truncate">
+                                          {hosp.name}
+                                        </h4>
+                                        <span className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded-md border border-slate-200 shrink-0">
+                                          {hosp.type}
+                                        </span>
+                                      </div>
+                                      <p className="text-[11px] text-slate-500 truncate flex items-center gap-1 mt-0.5">
+                                        <MapPin className="w-3 h-3 text-slate-400 shrink-0" />
+                                        <span>{hosp.district} - {hosp.address.split('،')[1] || hosp.address}</span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {hosp.activeDoctorsCount && (
+                                      <span className="hidden sm:inline-block text-[10px] font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">
+                                        {hosp.activeDoctorsCount} پزشک فعال
+                                      </span>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSelectHospital(hosp);
+                                      }}
+                                      className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs flex items-center gap-1 cursor-pointer"
+                                    >
+                                      <span>مشاهده پزشکان</span>
+                                      <ArrowLeft className="w-3 h-3" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                        )}
+
+                        {/* 3. Doctors Section */}
+                        {liveMatchedDoctors.length > 0 && (
+                          <div>
+                            <div className="sticky top-0 z-10 px-4 py-2 bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-600 flex items-center justify-between backdrop-blur-xs">
+                              <span className="flex items-center gap-1.5">
+                                <Users className="w-4 h-4 text-blue-600" />
+                                <span>پزشکان یافت شده ({liveMatchedDoctors.length})</span>
+                              </span>
+                              <span className="text-[10px] text-blue-600">انتخاب جهت نوبت‌دهی فوری</span>
+                            </div>
+                            <div className="divide-y divide-slate-100">
+                              {liveMatchedDoctors.map(doc => (
+                                <div
+                                  key={doc.id}
+                                  onClick={() => handleSelectDoctor(doc.slug)}
+                                  className="p-3 hover:bg-blue-50/70 transition-colors flex items-center justify-between gap-3 cursor-pointer group"
+                                >
+                                  <div className="flex items-center gap-3 min-w-0">
+                                    <img
+                                      src={doc.avatar}
+                                      alt={doc.name}
+                                      className="w-10 h-10 rounded-full object-cover border border-slate-200 shrink-0"
+                                      onError={(e) => {
+                                        const target = e.currentTarget as HTMLImageElement;
+                                        if (!target.src.includes('photo-1559839734')) {
+                                          target.src = 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=300';
+                                        }
+                                      }}
+                                    />
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                        <h4 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-blue-600 transition-colors truncate">
+                                          {doc.name}
+                                        </h4>
+                                        {(doc.hospitalName || (doc.hospitals && doc.hospitals.length > 0)) && (
+                                          <span className="text-[10px] bg-indigo-50 text-indigo-700 px-1.5 py-0.5 rounded border border-indigo-200 shrink-0 hidden sm:inline-flex items-center gap-0.5">
+                                            <Building2 className="w-2.5 h-2.5" />
+                                            {doc.hospitalName || doc.hospitals?.[0]}
+                                          </span>
+                                        )}
+                                      </div>
+                                      <p className="text-[11px] text-slate-500 truncate">{doc.specialtyName}</p>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 shrink-0">
+                                    {doc.nextAvailableSlot && (
+                                      <span className="hidden sm:inline-block text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
+                                        نوبت خالی: {doc.nextAvailableSlot}
+                                      </span>
+                                    )}
+                                    <button
+                                      type="button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleQuickBookDoctor(doc.slug);
+                                      }}
+                                      className="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-all shadow-xs cursor-pointer"
+                                    >
+                                      رزرو نوبت
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                      </div>
+                    )}
+
+                    {/* Fallback when query is typed (>= 2 chars) but nothing found */}
+                    {liveMatchedSpecialties.length === 0 &&
+                      liveMatchedHospitals.length === 0 &&
+                      liveMatchedDoctors.length === 0 && (
+                        <div className="p-6 text-center text-slate-500">
+                          <Search className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                          <p className="text-sm font-bold text-slate-700">موردی با عنوان «{heroSearchQuery}» در نتایج سریع یافت نشد</p>
+                          <p className="text-xs text-slate-400 mt-1 mb-3">
+                            می‌توانید با دکمه زیر تمام موارد مشابه را در بخش جستجوی پزشکان جستجو کنید.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsSearchFocused(false);
+                              navigate(`/doctors?search=${encodeURIComponent(heroSearchQuery)}`);
+                            }}
+                            className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm cursor-pointer"
+                          >
+                            <span>جستجوی سراسری «{heroSearchQuery}»</span>
+                            <ArrowLeft className="w-3.5 h-3.5" />
+                          </button>
                         </div>
-                      ))}
+                      )}
+
+                    {/* Dropdown Footer Actions */}
+                    <div className="p-2.5 bg-slate-50/95 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600 backdrop-blur-xs">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsSearchFocused(false);
+                          navigate(`/doctors?search=${encodeURIComponent(heroSearchQuery)}`);
+                        }}
+                        className="text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                      >
+                        <span>مشاهده تمامی نتایج برای «{heroSearchQuery}»</span>
+                        <ArrowLeft className="w-3.5 h-3.5" />
+                      </button>
+                      <span className="text-[11px] text-slate-400 hidden sm:inline">
+                        کلید Enter جهت جستجوی کلی
+                      </span>
                     </div>
+
                   </div>
                 )}
               </form>

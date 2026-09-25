@@ -231,6 +231,25 @@ export interface DoctorClinicItem {
   isCentral?: boolean;
 }
 
+export interface Hospital {
+  id: string;
+  name: string;
+  slug: string;
+  type: string;
+  city: string;
+  district: string;
+  address: string;
+  phone: string;
+  emergencyPhone?: string;
+  departments: string[];
+  supportedInsurances?: string[];
+  activeDoctorsCount?: number;
+  hasEmergency24h?: boolean;
+  hasOnlineBooking?: boolean;
+  rating?: number;
+  image?: string;
+}
+
 export interface Doctor {
   id: string;
   slug: string;
@@ -281,6 +300,8 @@ export interface Doctor {
   phone?: string;
   appointmentUrl?: string;
   socialLinks?: DoctorSocialLinks;
+  hospitals?: string[];
+  hospitalName?: string;
   video?: {
     url?: string;
     thumbnail?: string;

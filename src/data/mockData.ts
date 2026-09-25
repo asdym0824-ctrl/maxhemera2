@@ -23,7 +23,8 @@ import {
   DoctorClinicMembership,
   InsuranceCompany,
   DoctorSchedule,
-  ScheduleBlock
+  ScheduleBlock,
+  Hospital
 } from '../types';
 import { getRelativeISODate } from '../utils/dateUtils';
 import drSaraMohammadiAvatar from '../assets/images/dr_sara_portrait_1789682606727.jpg';
@@ -567,7 +568,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۶:۰۰',
     gender: 'male',
-    clinicName: 'کلینیک تخصصی ارتودنسی دکتر سعید قریشی'
+    clinicName: 'کلینیک تخصصی ارتودنسی دکتر سعید قریشی',
+    hospitalName: 'بیمارستان فوق تخصصی لاله',
+    hospitals: ['بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی آتیه', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-1',
@@ -779,7 +782,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 280000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۷:۳۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان بقیه‌الله (عج)',
+    hospitals: ['بیمارستان بقیه‌الله (عج)', 'بیمارستان فوق تخصصی قلب شهید رجایی', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-2',
@@ -943,7 +948,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 250000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۹:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی میلاد',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی میلاد', 'بیمارستان بقیه‌الله (عج)', 'بیمارستان فوق تخصصی خاتم‌الانبیاء']
   },
   {
     id: 'doc-3',
@@ -1093,7 +1100,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 300000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'فردا ۱۰:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان فوق تخصصی بهمن',
+    hospitals: ['بیمارستان فوق تخصصی بهمن', 'بیمارستان فوق تخصصی لاله', 'بیمارستان فوق تخصصی عرفان']
   },
   {
     id: 'doc-4',
@@ -1158,7 +1167,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 320000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'شنبه ۱۶:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی آتیه',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی آتیه', 'بیمارستان فوق تخصصی خاتم‌الانبیاء', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-5',
@@ -1220,7 +1231,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 270000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۸:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان فوق تخصصی بهمن',
+    hospitals: ['بیمارستان فوق تخصصی بهمن', 'بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی آتیه']
   },
   {
     id: 'doc-6',
@@ -1246,7 +1259,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 240000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'فردا ۱۱:۳۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان فوق تخصصی لاله',
+    hospitals: ['بیمارستان فوق تخصصی لاله', 'بیمارستان فوق تخصصی بهمن', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-7',
@@ -1272,7 +1287,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 290000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۲۰:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی دی',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی دی', 'بیمارستان تخصصی و فوق تخصصی کسری', 'بیمارستان فوق تخصصی عرفان']
   },
   {
     id: 'doc-8',
@@ -1298,7 +1315,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 300000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'شنبه ۱۷:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی آتیه',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی آتیه', 'بیمارستان فوق تخصصی بهمن', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-9',
@@ -1324,7 +1343,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 310000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۶:۳۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان فوق تخصصی لاله',
+    hospitals: ['بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی پارس', 'بیمارستان تخصصی و فوق تخصصی میلاد']
   },
   {
     id: 'doc-10',
@@ -1350,7 +1371,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 300000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'یکشنبه ۱۵:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی کسری',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی کسری', 'بیمارستان تخصصی و فوق تخصصی دی', 'بیمارستان تخصصی و فوق تخصصی پارس']
   },
   {
     id: 'doc-11',
@@ -1376,7 +1399,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 330000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۹:۳۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان مرکز قلب تهران',
+    hospitals: ['بیمارستان مرکز قلب تهران', 'بیمارستان فوق تخصصی قلب شهید رجایی', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-12',
@@ -1402,7 +1427,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 240000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'دوشنبه ۱۰:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان بقیه‌الله (عج)',
+    hospitals: ['بیمارستان بقیه‌الله (عج)', 'بیمارستان تخصصی و فوق تخصصی میلاد', 'بیمارستان فوق تخصصی خاتم‌الانبیاء']
   },
   {
     id: 'doc-13',
@@ -1428,7 +1455,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 290000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۸:۳۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان فوق تخصصی عرفان',
+    hospitals: ['بیمارستان فوق تخصصی عرفان', 'بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی آتیه']
   },
   {
     id: 'doc-14',
@@ -1454,7 +1483,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 340000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'سه‌شنبه ۱۶:۳۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی میلاد',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی میلاد', 'بیمارستان بقیه‌الله (عج)', 'بیمارستان تخصصی و فوق تخصصی کسری']
   },
   {
     id: 'doc-15',
@@ -1480,7 +1511,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 230000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۷:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان فوق تخصصی بهمن',
+    hospitals: ['بیمارستان فوق تخصصی بهمن', 'بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی آتیه']
   },
   {
     id: 'doc-16',
@@ -1506,7 +1539,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 350000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'چهارشنبه ۱۱:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان فوق تخصصی لاله',
+    hospitals: ['بیمارستان فوق تخصصی لاله', 'بیمارستان فوق تخصصی بهمن', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-17',
@@ -1532,7 +1567,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 280000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۲۱:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان فوق تخصصی خاتم‌الانبیاء',
+    hospitals: ['بیمارستان فوق تخصصی خاتم‌الانبیاء', 'بیمارستان تخصصی و فوق تخصصی دی', 'بیمارستان تخصصی و فوق تخصصی کسری']
   },
   {
     id: 'doc-18',
@@ -1558,7 +1595,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 290000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'فردا ۱۴:۰۰',
-    gender: 'female'
+    gender: 'female',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی آتیه',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی آتیه', 'بیمارستان فوق تخصصی بهمن', 'بیمارستان تخصصی و فوق تخصصی پارس']
   },
   {
     id: 'doc-19',
@@ -1584,7 +1623,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 320000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'امروز ۱۷:۴۵',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان تخصصی و فوق تخصصی پارس',
+    hospitals: ['بیمارستان تخصصی و فوق تخصصی پارس', 'بیمارستان فوق تخصصی لاله', 'بیمارستان تخصصی و فوق تخصصی دی']
   },
   {
     id: 'doc-20',
@@ -1610,7 +1651,9 @@ export const MOCK_DOCTORS: Doctor[] = [
     onlineConsultationFee: 290000,
     hasOnlineConsultation: true,
     nextAvailableSlot: 'شنبه ۱۸:۰۰',
-    gender: 'male'
+    gender: 'male',
+    hospitalName: 'بیمارستان بقیه‌الله (عج)',
+    hospitals: ['بیمارستان بقیه‌الله (عج)', 'بیمارستان تخصصی و فوق تخصصی کسری', 'بیمارستان تخصصی و فوق تخصصی میلاد']
   }
 ];
 
@@ -2808,6 +2851,223 @@ export const MOCK_CLINIC: Clinic = {
   }
 };
 
+export const MOCK_HOSPITALS: Hospital[] = [
+  {
+    id: 'hosp-baghiatallah',
+    name: 'بیمارستان بقیه‌الله (عج)',
+    slug: 'baghiatallah-hospital',
+    type: 'بیمارستان تخصصی و فوق تخصصی',
+    city: 'تهران',
+    district: 'ونک / ملاصدرا',
+    address: 'تهران، میدان ونک، خیابان ملاصدرا، تقاطع خیابان شیخ بهایی',
+    phone: '۰۲۱-۸۱۴۵۱',
+    emergencyPhone: '۰۲۱-۸۱۴۵۲۰۰۰',
+    departments: ['قلب و عروق', 'ارتوپدی', 'جراحی مغز و اعصاب', 'گوارش و کبد', 'داخلی', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['نیروهای مسلح (ساتا)', 'تأمین اجتماعی', 'بیمه ایران', 'بیمه دانا', 'بیمه البرز'],
+    activeDoctorsCount: 45,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-laleh',
+    name: 'بیمارستان فوق تخصصی لاله',
+    slug: 'laleh-hospital',
+    type: 'بیمارستان خصوصی و فوق تخصصی',
+    city: 'تهران',
+    district: 'شهرک غرب',
+    address: 'تهران، شهرک غرب، فاز ۵، خیابان سیمای ایران',
+    phone: '۰۲۱-۸۸۵۷۱۰۶۵',
+    emergencyPhone: '۰۲۱-۸۸۵۷۱۰۶۰',
+    departments: ['ارتودنسی و فک', 'جراحی عمومی', 'قلب و عروق', 'زنان و زایمان', 'اطفال', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه آسیا', 'بیمه دانا', 'بیمه البرز', 'بیمه سامان', 'بیمه پارسیان'],
+    activeDoctorsCount: 38,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-day',
+    name: 'بیمارستان تخصصی و فوق تخصصی دی',
+    slug: 'day-hospital',
+    type: 'بیمارستان خصوصی و فوق تخصصی',
+    city: 'تهران',
+    district: 'ولیعصر / توانیر',
+    address: 'تهران، خیابان ولیعصر، تقاطع توانیر',
+    phone: '۰۲۱-۸۸۷۹۷۱۱۱',
+    emergencyPhone: '۰۲۱-۸۸۷۹۷۱۲۰',
+    departments: ['قلب و عروق', 'آنژیوگرافی', 'جراحی عمومی', 'ارتوپدی', 'مغز و اعصاب', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه دانا', 'بیمه البرز', 'بیمه آسیا', 'بیمه پاسارگاد'],
+    activeDoctorsCount: 32,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-milad',
+    name: 'بیمارستان تخصصی و فوق تخصصی میلاد',
+    slug: 'milad-hospital',
+    type: 'بیمارستان فوق تخصصی تأمین اجتماعی',
+    city: 'تهران',
+    district: 'بزرگراه همت',
+    address: 'تهران، بزرگراه شهید همت، جنب برج میلاد',
+    phone: '۰۲۱-۸۲۰۳۰',
+    emergencyPhone: '۰۲۱-۸۲۰۳۳۳۳۳',
+    departments: ['مغز و اعصاب', 'ارتوپدی', 'جراحی قلب', 'انکولوژی', 'اورژانس ۲۴ ساعته', 'چشم‌پزشکی'],
+    supportedInsurances: ['تأمین اجتماعی', 'سلامت همگانی', 'خدمات درمانی'],
+    activeDoctorsCount: 65,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-atieh',
+    name: 'بیمارستان تخصصی و فوق تخصصی آتیه',
+    slug: 'atieh-hospital',
+    type: 'بیمارستان خصوصی',
+    city: 'تهران',
+    district: 'شهرک غرب',
+    address: 'تهران، شهرک غرب، بلوار فرحزادی، تقاطع بلوار دادمان',
+    phone: '۰۲۱-۸۸۰۸۶۰۰۱',
+    emergencyPhone: '۰۲۱-۸۸۰۸۶۰۰۸',
+    departments: ['ارتوپدی و زانو', 'جراحی فک و دندان', 'روانپزشکی', 'گوارش', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه دانا', 'بیمه البرز', 'بیمه سامان', 'بیمه پاسارگاد'],
+    activeDoctorsCount: 40,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-erfan',
+    name: 'بیمارستان فوق تخصصی عرفان',
+    slug: 'erfan-hospital',
+    type: 'بیمارستان خصوصی و فوق تخصصی',
+    city: 'تهران',
+    district: 'سعادت‌آباد',
+    address: 'تهران، سعادت‌آباد، بین چهارراه سرو و میدان شهرداری، خیابان بخشایش',
+    phone: '۰۲۱-۲۳۰۲۱۰۰۰',
+    emergencyPhone: '۰۲۱-۲۳۰۲۱۱۰۰',
+    departments: ['قلب و عروق', 'پوست و جراحی زیبایی', 'ارتوپدی', 'زنان و نازایی', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه دانا', 'بیمه البرز', 'بیمه کارآفرین', 'بیمه سامان'],
+    activeDoctorsCount: 42,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-khatam',
+    name: 'بیمارستان فوق تخصصی خاتم‌الانبیاء',
+    slug: 'khatam-hospital',
+    type: 'بیمارستان فوق تخصصی',
+    city: 'تهران',
+    district: 'میرداماد / ونک',
+    address: 'تهران، خیابان ولیعصر، بالاتر از بلوار میرداماد، خیابان شهید رشید یاسمی',
+    phone: '۰۲۱-۸۸۸۸۴۰۴۰',
+    emergencyPhone: '۰۲۱-۸۸۸۸۴۰۴۵',
+    departments: ['جراحی قلب و عروق', 'پیوند اعضا', 'آنژیوپلاستی', 'ارتوپدی', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['نیروهای مسلح (ساتا)', 'تأمین اجتماعی', 'بیمه ایران', 'بیمه دانا'],
+    activeDoctorsCount: 50,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-rajaei',
+    name: 'بیمارستان فوق تخصصی قلب شهید رجایی',
+    slug: 'rajaei-heart-hospital',
+    type: 'مرکز آموزشی، پژوهشی و درمانی قلب',
+    city: 'تهران',
+    district: 'ولیعصر / پارک ملت',
+    address: 'تهران، خیابان ولیعصر، تقاطع نیایش، جنب پارک ملت',
+    phone: '۰۲۱-۲۳۹۲۱',
+    emergencyPhone: '۰۲۱-۲۳۹۲۲۲۲۲',
+    departments: ['فوق تخصصی قلب و عروق', 'جراحی قلب باز', 'الکتروفیزیولوژی', 'اکوکاردیوگرافی پیشرفته'],
+    supportedInsurances: ['تأمین اجتماعی', 'خدمات درمانی', 'سلامت همگانی', 'نیروهای مسلح (ساتا)'],
+    activeDoctorsCount: 58,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-bahman',
+    name: 'بیمارستان فوق تخصصی بهمن',
+    slug: 'bahman-hospital',
+    type: 'بیمارستان خصوصی',
+    city: 'تهران',
+    district: 'شهرک غرب',
+    address: 'تهران، شهرک غرب، خیابان ایران زمین شمالی',
+    phone: '۰۲۱-۸۸۵۶۰۱۱۰',
+    emergencyPhone: '۰۲۱-۸۸۵۶۰۱۱۵',
+    departments: ['زنان و زایمان', 'جراحی عمومی', 'اطفال', 'پوست و مو', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه البرز', 'بیمه دانا', 'بیمه سامان', 'بیمه پارسیان'],
+    activeDoctorsCount: 36,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.8,
+    image: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-kasra',
+    name: 'بیمارستان تخصصی و فوق تخصصی کسری',
+    slug: 'kasra-hospital',
+    type: 'بیمارستان خصوصی',
+    city: 'تهران',
+    district: 'میدان آرژانتین',
+    address: 'تهران، میدان آرژانتین، خیابان الوند',
+    phone: '۰۲۱-۸۲۱۱۱۰۰۰',
+    emergencyPhone: '۰۲۱-۸۲۱۱۱۲۰۰',
+    departments: ['جراحی مغز و اعصاب', 'گوش و حلق و بینی', 'جراحی عمومی', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه آسیا', 'بیمه دانا', 'بیمه البرز'],
+    activeDoctorsCount: 30,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-pars',
+    name: 'بیمارستان تخصصی و فوق تخصصی پارس',
+    slug: 'pars-hospital',
+    type: 'بیمارستان خصوصی',
+    city: 'تهران',
+    district: 'بلوار کشاورز',
+    address: 'تهران، بلوار کشاورز، تقاطع خیابان وصال شیرازی',
+    phone: '۰۲۱-۸۸۹۶۰۰۵۱',
+    departments: ['قلب و عروق', 'جراحی عمومی', 'اورولوژی', 'انکولوژی', 'اورژانس ۲۴ ساعته'],
+    supportedInsurances: ['بیمه ایران', 'بیمه البرز', 'بیمه دانا', 'بیمه آسیا'],
+    activeDoctorsCount: 28,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.7,
+    image: 'https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?auto=format&fit=crop&q=80&w=600'
+  },
+  {
+    id: 'hosp-tehran-heart',
+    name: 'بیمارستان مرکز قلب تهران',
+    slug: 'tehran-heart-center',
+    type: 'مرکز فوق تخصصی قلب و عروق',
+    city: 'تهران',
+    district: 'امیرآباد / کارگر شمالی',
+    address: 'تهران، بزرگراه جلال آل احمد، تقاطع کارگر شمالی',
+    phone: '۰۲۱-۸۸۰۲۹۶۰۰',
+    departments: ['جراحی قلب باز', 'آنژیوگرافی و استنت', 'اکوکاردیوگرافی پیشرفته', 'مراقبت‌های ویژه CCU'],
+    supportedInsurances: ['تأمین اجتماعی', 'خدمات درمانی', 'سلامت همگانی', 'نیروهای مسلح (ساتا)'],
+    activeDoctorsCount: 48,
+    hasEmergency24h: true,
+    hasOnlineBooking: true,
+    rating: 4.9,
+    image: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600'
+  }
+];
+
 export const MOCK_CLINIC_STAFF: ClinicStaff[] = [
   {
     id: 'staff-1',
@@ -3412,6 +3672,21 @@ export const MOCK_DOCTOR_SCHEDULES: DoctorSchedule[] = [
     officeId: 'off-1',
     officeTitle: 'مطب اصلی - سعادت‌آباد',
     dayOfWeek: 4, // چهارشنبه
+    startTime: '16:00',
+    endTime: '20:30',
+    visitDurationMinutes: 30,
+    slotIntervalMinutes: 30,
+    visitTypes: ['in_person'],
+    active: true
+  },
+  {
+    id: 'sch-doc1-off1-fri',
+    doctorId: 'doc-1',
+    clinicId: 'clinic-1',
+    branchId: 'branch-1',
+    officeId: 'off-1',
+    officeTitle: 'مطب اصلی - سعادت‌آباد (شیفت آدینه)',
+    dayOfWeek: 6, // جمعه
     startTime: '16:00',
     endTime: '20:30',
     visitDurationMinutes: 30,

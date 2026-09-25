@@ -64,6 +64,11 @@ export const DoctorCompactCard: React.FC<DoctorCompactCardProps> = ({
               <Clock className="w-2.5 h-2.5 text-emerald-600" />
               <span>نوبت: {doctor.nextAvailableSlot}</span>
             </span>
+            {(doctor.hospitalName || (doctor.hospitals && doctor.hospitals.length > 0)) && (
+              <span className="hidden md:inline-flex items-center gap-0.5 text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded-md font-medium shrink-0">
+                🏥 {doctor.hospitalName || doctor.hospitals?.[0]}
+              </span>
+            )}
             <span className="hidden sm:inline truncate text-slate-400">
               {doctor.province ? `${doctor.province} - ${doctor.city}` : doctor.city}
             </span>

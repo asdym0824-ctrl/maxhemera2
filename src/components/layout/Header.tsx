@@ -38,7 +38,8 @@ import {
   Check,
   Crop,
   Image as ImageIcon,
-  FileText
+  FileText,
+  Settings
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { UserRole, Doctor } from '../../types';
@@ -948,9 +949,12 @@ export const Header: React.FC<HeaderProps> = ({
     const adminNav = [
       { id: 'admin_home', label: 'داشبورد جامع کلان', path: '/admin', icon: LayoutDashboard, active: location.pathname === '/admin' },
       { id: 'admin_users', label: 'کاربران و پرمیشن‌ها', path: '/admin/users', icon: Users, active: location.pathname === '/admin/users' },
+      { id: 'admin_branches', label: 'شعب و مراکز', path: '/admin/branches', icon: Building2, active: location.pathname === '/admin/branches' },
+      { id: 'admin_catalog', label: 'تعرفه‌ها و خدمات', path: '/admin/catalog', icon: Stethoscope, active: location.pathname === '/admin/catalog' },
       { id: 'admin_finance', label: 'واحد مالی و تسویه‌ها', path: '/admin/finance', icon: DollarSign, active: location.pathname === '/admin/finance' },
-      { id: 'admin_marketing', label: 'مدیریت محتوا', path: '/admin/marketing', icon: Sliders, active: location.pathname === '/admin/marketing' },
-      { id: 'admin_settings', label: 'تنظیمات و امنیت', path: '/admin/settings', icon: ShieldAlert, active: location.pathname === '/admin/settings' },
+      { id: 'admin_websites', label: 'سایت پزشکان', path: '/admin/websites', icon: Globe, active: location.pathname === '/admin/websites' },
+      { id: 'admin_operations', label: 'عملیات و صف', path: '/admin/operations', icon: Settings, active: location.pathname === '/admin/operations' },
+      { id: 'admin_security', label: 'تنظیمات و امنیت', path: '/admin/security', icon: ShieldAlert, active: location.pathname === '/admin/security' || location.pathname === '/admin/settings' },
     ];
 
     return (
@@ -1027,7 +1031,34 @@ export const Header: React.FC<HeaderProps> = ({
                       className="w-full text-right px-3 py-2 hover:bg-rose-50 text-rose-900 rounded-xl flex items-center gap-2 transition-colors"
                     >
                       <LayoutDashboard className="w-4 h-4 text-rose-600" />
-                      <span>داشبورد کلان سامانه</span>
+                      <span>مرکز فرماندهی کلان</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/users"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="w-full text-right px-3 py-2 hover:bg-rose-50 text-slate-700 rounded-xl flex items-center gap-2 transition-colors"
+                    >
+                      <Users className="w-4 h-4 text-rose-600" />
+                      <span>مدیریت کاربران و نقش‌ها (RBAC)</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/finance"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="w-full text-right px-3 py-2 hover:bg-rose-50 text-slate-700 rounded-xl flex items-center gap-2 transition-colors"
+                    >
+                      <DollarSign className="w-4 h-4 text-emerald-600" />
+                      <span>تسویه حساب و کارمزد پزشکان</span>
+                    </Link>
+
+                    <Link
+                      to="/admin/security"
+                      onClick={() => setUserDropdownOpen(false)}
+                      className="w-full text-right px-3 py-2 hover:bg-rose-50 text-slate-700 rounded-xl flex items-center gap-2 transition-colors"
+                    >
+                      <ShieldAlert className="w-4 h-4 text-rose-600" />
+                      <span>لاگ‌های امنیتی و بکاپ دیتابیس</span>
                     </Link>
 
                     <Link
