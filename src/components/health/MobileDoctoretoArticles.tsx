@@ -9,6 +9,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { HealthArticle } from '../../types';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 interface MobileDoctoretoArticlesProps {
   articles: HealthArticle[];
@@ -68,7 +69,7 @@ export const MobileDoctoretoArticles: React.FC<MobileDoctoretoArticlesProps> = (
             <span className={`text-[10px] sm:text-xs px-1.5 py-0.2 rounded-full font-mono ${
               selectedCategory === 'all' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
             }`}>
-              {articles.length}
+              {toPersianDigits(articles.length)}
             </span>
           </button>
 
@@ -90,7 +91,7 @@ export const MobileDoctoretoArticles: React.FC<MobileDoctoretoArticlesProps> = (
                 <span className={`text-[10px] sm:text-xs px-1.5 py-0.2 rounded-full font-mono ${
                   isSelected ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
                 }`}>
-                  {count}
+                  {toPersianDigits(count)}
                 </span>
               </button>
             );
@@ -150,7 +151,7 @@ export const MobileDoctoretoArticles: React.FC<MobileDoctoretoArticlesProps> = (
                 {/* Read Time Badge */}
                 <span className="absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-sm text-slate-800 text-[10px] sm:text-xs font-bold px-2.5 py-0.5 rounded-lg flex items-center gap-1 shadow-2xs">
                   <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600" />
-                  <span>{art.readTimeMinutes} دقیقه مطالعه</span>
+                  <span>{toPersianDigits(art.readTimeMinutes)} دقیقه مطالعه</span>
                 </span>
               </div>
 

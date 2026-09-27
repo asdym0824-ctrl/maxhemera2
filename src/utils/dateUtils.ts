@@ -21,18 +21,21 @@ export function isAppointmentToday(appointment: { date: string }): boolean {
   return isDateToday(appointment.date);
 }
 
+import { toPersianDigits } from './persianWriting';
+
 export function formatToPersianDate(dateInput: string | Date): string {
   try {
     const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
-    if (isNaN(d.getTime())) return String(dateInput);
+    if (isNaN(d.getTime())) return toPersianDigits(String(dateInput));
 
-    return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+    const formatted = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     }).format(d);
+    return toPersianDigits(formatted);
   } catch (e) {
-    return String(dateInput);
+    return toPersianDigits(String(dateInput));
   }
 }
 
@@ -40,7 +43,7 @@ export function formatPersianTimestamp(isoString?: string): string {
   if (!isoString) return '';
   try {
     const d = new Date(isoString);
-    if (isNaN(d.getTime())) return isoString;
+    if (isNaN(d.getTime())) return toPersianDigits(isoString);
 
     const dateFormatted = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
       month: 'short',
@@ -53,9 +56,9 @@ export function formatPersianTimestamp(isoString?: string): string {
       hour12: false
     }).format(d);
 
-    return `${dateFormatted}، ساعت ${timeFormatted}`;
+    return toPersianDigits(`${dateFormatted}، ساعت ${timeFormatted}`);
   } catch {
-    return isoString;
+    return toPersianDigits(isoString);
   }
 }
 
@@ -63,14 +66,15 @@ export function formatPersianTimeOnly(isoString?: string): string {
   if (!isoString) return '';
   try {
     const d = new Date(isoString);
-    if (isNaN(d.getTime())) return isoString;
-    return new Intl.DateTimeFormat('fa-IR', {
+    if (isNaN(d.getTime())) return toPersianDigits(isoString);
+    const timeFormatted = new Intl.DateTimeFormat('fa-IR', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: false
     }).format(d);
+    return toPersianDigits(timeFormatted);
   } catch {
-    return isoString;
+    return toPersianDigits(isoString);
   }
 }
 

@@ -19,6 +19,10 @@ import {
   Layers
 } from 'lucide-react';
 import { ActivityLog } from '../../types';
+import { 
+  toPersianDigits, 
+  cleanPersianText 
+} from '../../utils/persianWriting';
 
 interface SuperAdminSecuritySettingsProps {
   activityLogs: ActivityLog[];
@@ -161,8 +165,8 @@ export const SuperAdminSecuritySettings: React.FC<SuperAdminSecuritySettingsProp
               <tbody className="divide-y divide-slate-100">
                 {filteredLogs.map((log, i) => (
                   <tr key={log.id || i} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="p-3.5 font-mono text-slate-600 text-[11px]">
-                      {log.timestamp}
+                    <td className="p-3.5 text-slate-600 text-[11px]">
+                      {toPersianDigits(log.timestamp)}
                     </td>
                     <td className="p-3.5 font-bold text-slate-900">
                       {log.actorName}
@@ -176,7 +180,7 @@ export const SuperAdminSecuritySettings: React.FC<SuperAdminSecuritySettingsProp
                       {log.action}
                     </td>
                     <td className="p-3.5 text-slate-700 leading-relaxed max-w-md truncate">
-                      {log.description}
+                      {cleanPersianText(log.description)}
                     </td>
                     <td className="p-3.5 font-mono text-slate-400 text-[10px]" dir="ltr">
                       192.168.1.{10 + (i % 80)}
@@ -195,13 +199,13 @@ export const SuperAdminSecuritySettings: React.FC<SuperAdminSecuritySettingsProp
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
               <span className="text-slate-400 block">آخرین نسخه پشتیبان</span>
-              <span className="font-extrabold text-sm text-slate-900 block mt-1">{lastBackupTime}</span>
+              <span className="font-extrabold text-sm text-slate-900 block mt-1">{toPersianDigits(lastBackupTime)}</span>
               <span className="text-[10px] text-emerald-600 font-bold">وضعیت: موفق و تایید شده</span>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-1">
               <span className="text-slate-400 block">حجم اسنپ‌شات دیتابیس</span>
-              <span className="font-extrabold text-sm text-slate-900 block mt-1">۱۲۸.۴ مگابایت (فشرده)</span>
+              <span className="font-extrabold text-sm text-slate-900 block mt-1">۱۲۸٫۴ مگابایت (فشرده)</span>
               <span className="text-[10px] text-slate-500">شامل ۲۴ جدول و اطلاعات رمزنگاری‌شده</span>
             </div>
 

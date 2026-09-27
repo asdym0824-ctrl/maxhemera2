@@ -14,6 +14,12 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Specialty, ServiceItem, InsuranceCompany } from '../../types';
+import { 
+  toPersianDigits, 
+  formatPersianPrice, 
+  formatPersianNumber, 
+  formatPersianPercent 
+} from '../../utils/persianWriting';
 
 interface SuperAdminTariffCatalogProps {
   specialties: Specialty[];
@@ -158,7 +164,7 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          تعرفه‌های مصوب و تسهیم پورسانت ({tariffList.length})
+          تعرفه‌های مصوب و تسهیم پورسانت ({toPersianDigits(tariffList.length)})
         </button>
         <button
           type="button"
@@ -169,7 +175,7 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          کاتالوگ تخصص‌های پزشکی ({specialties.length})
+          کاتالوگ تخصص‌های پزشکی ({toPersianDigits(specialties.length)})
         </button>
         <button
           type="button"
@@ -180,7 +186,7 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          قوانین فرانشیز و پوشش بیمه‌ها ({insurances.length})
+          قوانین فرانشیز و پوشش بیمه‌ها ({toPersianDigits(insurances.length)})
         </button>
       </div>
 
@@ -232,22 +238,22 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
                         </span>
                       </td>
                       <td className="p-3.5 font-extrabold text-blue-700 text-sm">
-                        {t.basePrice.toLocaleString('fa-IR')} <span className="text-xs font-normal text-slate-500">تومان</span>
+                        {formatPersianPrice(t.basePrice)}
                       </td>
                       <td className="p-3.5">
-                        <div className="font-bold text-slate-800">{t.doctorSharePercent}٪</div>
+                        <div className="font-bold text-slate-800">{toPersianDigits(t.doctorSharePercent)}٪</div>
                         <div className="text-[10px] text-slate-400 font-mono">
-                          ({docShareAmount.toLocaleString('fa-IR')} ت)
+                          ({formatPersianPrice(docShareAmount)})
                         </div>
                       </td>
                       <td className="p-3.5">
-                        <div className="font-bold text-purple-700">{t.clinicSharePercent}٪</div>
+                        <div className="font-bold text-purple-700">{toPersianDigits(t.clinicSharePercent)}٪</div>
                         <div className="text-[10px] text-slate-400 font-mono">
-                          ({clinicShareAmount.toLocaleString('fa-IR')} ت)
+                          ({formatPersianPrice(clinicShareAmount)})
                         </div>
                       </td>
                       <td className="p-3.5 text-slate-600 font-medium">
-                        {t.durationMinutes} دقیقه
+                        {toPersianDigits(t.durationMinutes)} دقیقه
                       </td>
                       <td className="p-3.5 text-center">
                         <button
@@ -278,7 +284,7 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
                   <span className="text-[11px] text-slate-400 font-mono" dir="ltr">{spec.englishName}</span>
                 </div>
                 <span className="bg-blue-50 text-blue-700 font-bold px-2 py-0.5 rounded-lg border border-blue-100 text-[11px]">
-                  {spec.doctorCount} پزشک
+                  {toPersianDigits(spec.doctorCount)} پزشک
                 </span>
               </div>
               <p className="text-slate-600 text-[11px] line-clamp-2 leading-relaxed">
@@ -326,16 +332,16 @@ export const SuperAdminTariffCatalog: React.FC<SuperAdminTariffCatalogProps> = (
                     </span>
                   </td>
                   <td className="p-3.5 font-black text-slate-800 text-sm">
-                    {ins.coverageCoPayPercent}٪ <span className="text-xs font-normal text-slate-400">توسط بیمه</span>
+                    {toPersianDigits(ins.coverageCoPayPercent)}٪ <span className="text-xs font-normal text-slate-400">توسط بیمه</span>
                   </td>
                   <td className="p-3.5">
                     {ins.electronicRxSupported ? (
-                      <span className="text-emerald-700 font-bold text-[11px]">✓ فعال (استعلام کد ملی)</span>
+                      <span className="text-emerald-700 font-bold text-[11px]">✓ فعال (استعلام کدملی)</span>
                     ) : (
                       <span className="text-slate-400">نیاز به دفترچه</span>
                     )}
                   </td>
-                  <td className="p-3.5 font-bold text-slate-700">{ins.acceptedDoctorsCount || 10} پزشک</td>
+                  <td className="p-3.5 font-bold text-slate-700">{toPersianDigits(ins.acceptedDoctorsCount || 10)} پزشک</td>
                   <td className="p-3.5 text-slate-600 text-[11px] max-w-xs truncate">{ins.shortDescription}</td>
                 </tr>
               ))}

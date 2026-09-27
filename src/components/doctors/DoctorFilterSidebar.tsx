@@ -5,6 +5,7 @@ import { MOCK_INSURANCES } from '../../data/mockData';
 import { IRAN_PROVINCES } from '../../data/provinces';
 import { InsuranceFinderModal } from '../insurance/InsuranceFinderModal';
 import { MultiSelectDropdown, MultiSelectOption } from '../search/MultiSelectDropdown';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 interface DoctorFilterSidebarProps {
   specialties: Specialty[];
@@ -56,7 +57,7 @@ export const DoctorFilterSidebar: React.FC<DoctorFilterSidebarProps> = ({
     return specialties.map(s => ({
       value: s.id,
       label: s.name,
-      badge: `${s.doctorCount} پزشک`
+      badge: `${toPersianDigits(s.doctorCount)} پزشک`
     }));
   }, [specialties]);
 

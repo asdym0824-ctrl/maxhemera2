@@ -13,6 +13,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 export interface PatientReview {
   id: string;
@@ -199,7 +200,7 @@ export const MobileDoctoretoReviews: React.FC<MobileDoctoretoReviewsProps> = ({
                     </span>
                   </div>
                   <div className="text-[10px] text-slate-400 mt-0.5">
-                    ثبت نوبت اینترنتی • {currentReview.date}
+                    ثبت نوبت اینترنتی • {toPersianDigits(currentReview.date)}
                   </div>
                 </div>
               </div>
@@ -259,7 +260,7 @@ export const MobileDoctoretoReviews: React.FC<MobileDoctoretoReviewsProps> = ({
               {currentReview.helpfulCount && (
                 <div className="flex items-center gap-1 text-[10px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full font-medium">
                   <ThumbsUp className="w-2.5 h-2.5 text-slate-500" />
-                  <span>{currentReview.helpfulCount} نفر این نظر را مفید دانستند</span>
+                  <span>{toPersianDigits(currentReview.helpfulCount)} نفر این نظر را مفید دانستند</span>
                 </div>
               )}
             </div>
@@ -302,14 +303,14 @@ export const MobileDoctoretoReviews: React.FC<MobileDoctoretoReviewsProps> = ({
                     ? 'w-5 bg-emerald-600' 
                     : 'w-1.5 bg-slate-300 hover:bg-slate-400'
                 }`}
-                aria-label={`دیدگاه ${idx + 1}`}
+                aria-label={`دیدگاه ${toPersianDigits(idx + 1)}`}
               />
             ))}
           </div>
 
           {/* Index Counter */}
           <span className="text-[10px] font-mono font-bold text-slate-400">
-            {currentIndex + 1} از {reviews.length}
+            {toPersianDigits(currentIndex + 1)} از {toPersianDigits(reviews.length)}
           </span>
         </div>
       </div>

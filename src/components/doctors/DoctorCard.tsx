@@ -6,6 +6,7 @@ import { Rating } from '../common/Rating';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
 import { ClinicalCornerAccents } from '../common/medicalPattern/ClinicalCardAccent';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -52,7 +53,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, onQuic
                 {doctor.name}
               </h3>
               <Badge variant="blue" size="sm" className="shrink-0 text-[10px] sm:text-xs">
-                {doctor.experienceYears} سال
+                {toPersianDigits(doctor.experienceYears)} سال
               </Badge>
             </div>
 
@@ -105,7 +106,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, onQuic
               نزدیک‌ترین نوبت:
             </span>
             <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 shrink-0">
-              {doctor.nextAvailableSlot}
+              {toPersianDigits(doctor.nextAvailableSlot)}
             </span>
           </div>
 
@@ -119,7 +120,7 @@ export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, onQuic
                 {doctor.supportedInsurances.slice(0, 2).join('، ')}
                 {doctor.supportedInsurances.length > 2 && (
                   <span className="text-[10px] text-blue-600 font-normal mr-1">
-                    +{doctor.supportedInsurances.length - 2}
+                    +{toPersianDigits(doctor.supportedInsurances.length - 2)}
                   </span>
                 )}
               </span>

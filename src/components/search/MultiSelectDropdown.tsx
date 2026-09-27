@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronDown, Check, X, Search } from 'lucide-react';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 export interface MultiSelectOption {
   value: string;
@@ -127,7 +128,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                 ? 'bg-blue-50 text-blue-700 border-blue-200' 
                 : 'bg-blue-500/20 text-blue-300 border-blue-400/30'
             }`}>
-              {selectedValues.length} {unitLabel} انتخاب شده
+              {toPersianDigits(selectedValues.length)} {unitLabel} انتخاب شده
             </span>
             <button
               type="button"
@@ -189,7 +190,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                     ? 'bg-slate-100 text-slate-700 border-slate-200'
                     : 'bg-slate-800 text-slate-300 border-slate-700'
                 }`}>
-                  +{selectedOptions.length - 2} مورد دیگر
+                  +{toPersianDigits(selectedOptions.length - 2)} مورد دیگر
                 </span>
               )}
             </>
@@ -251,7 +252,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             isLight ? 'text-slate-500 border-slate-100' : 'text-slate-400 border-slate-800'
           }`}>
             <span className="font-medium">
-              {filteredOptions.length} مورد قابل انتخاب
+              {toPersianDigits(filteredOptions.length)} مورد قابل انتخاب
             </span>
             <div className="flex items-center gap-2 font-bold">
               <button

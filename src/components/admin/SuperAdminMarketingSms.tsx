@@ -13,6 +13,11 @@ import {
   Search,
   Check
 } from 'lucide-react';
+import { 
+  toPersianDigits, 
+  formatPersianPrice, 
+  formatPersianNumber 
+} from '../../utils/persianWriting';
 
 interface PromoCodeItem {
   id: string;
@@ -101,7 +106,7 @@ export const SuperAdminMarketingSms: React.FC = () => {
           <Radio className="w-4 h-4 text-emerald-400 animate-pulse shrink-0" />
           <div>
             <span className="text-[10px] text-slate-400 block font-normal">خط خدماتی ۱۰۰۰۸۸۹۹</span>
-            <span className="font-mono text-emerald-300">اعتبار: ۱,۴۵۰,۰۰۰ تومان</span>
+            <span className="text-emerald-300">اعتبار: {formatPersianPrice(1450000)}</span>
           </div>
         </div>
       </div>
@@ -128,7 +133,7 @@ export const SuperAdminMarketingSms: React.FC = () => {
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          کدهای تخفیف و کوپن‌های درمانی ({promoCodes.length})
+          کدهای تخفیف و کوپن‌های درمانی ({toPersianDigits(promoCodes.length)})
         </button>
       </div>
 
@@ -138,7 +143,7 @@ export const SuperAdminMarketingSms: React.FC = () => {
           {broadcastDone && (
             <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center gap-2 animate-in fade-in">
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-              <span>کمپین پیامکی با موفقیت به ۲,۴۵۰ شماره تلفن همراه با خط ۱۰۰۰ ارسال شد.</span>
+              <span>کمپین پیامکی با موفقیت به ۲٬۴۵۰ شماره تلفن همراه با خط ۱۰۰۰ ارسال شد.</span>
             </div>
           )}
 
@@ -155,7 +160,7 @@ export const SuperAdminMarketingSms: React.FC = () => {
                 onChange={e => setTargetAudience(e.target.value)}
                 className="w-full p-2.5 rounded-xl border border-slate-300 font-bold focus:border-rose-500 focus:outline-none bg-white"
               >
-                <option value="all">کلیه بیماران ثبت‌شده در سیستم (۲,۴۵۰ نفر)</option>
+                <option value="all">کلیه بیماران ثبت‌شده در سیستم (۲٬۴۵۰ نفر)</option>
                 <option value="vip">بیماران باشگاه طلایی و VIP (۴۸۰ نفر)</option>
                 <option value="followup">بیماران دارای موعد پیگیری یا چکاپ (۳۲۰ نفر)</option>
                 <option value="cardio">مراجعین بخش قلب و عروق (۶۱۰ نفر)</option>
@@ -190,7 +195,7 @@ export const SuperAdminMarketingSms: React.FC = () => {
 
             <div className="flex items-center justify-between pt-2 border-t border-slate-200">
               <span className="text-[11px] text-slate-500">
-                هزینه تخمینی کمپین: <strong className="text-slate-900 font-bold">۲۴۵,۰۰۰ تومان</strong> (کسر از اعتبار پنل)
+                هزینه تخمینی کمپین: <strong className="text-slate-900 font-bold">{formatPersianPrice(245000)}</strong> (کسر از اعتبار پنل)
               </span>
 
               <button
@@ -239,16 +244,16 @@ export const SuperAdminMarketingSms: React.FC = () => {
                       {promo.code}
                     </td>
                     <td className="p-3.5 font-bold text-slate-900">
-                      {promo.discountPercent}٪ تخفیف
+                      {toPersianDigits(promo.discountPercent)}٪ تخفیف
                     </td>
                     <td className="p-3.5 font-semibold text-slate-700">
-                      حداکثر {promo.maxDiscountAmount.toLocaleString('fa-IR')} تومان
+                      حداکثر {formatPersianPrice(promo.maxDiscountAmount)}
                     </td>
                     <td className="p-3.5 text-slate-800">
-                      <span className="font-bold">{promo.usageCount}</span> از {promo.maxUsageLimit} بار
+                      <span className="font-bold">{toPersianDigits(promo.usageCount)}</span> از {toPersianDigits(promo.maxUsageLimit)} بار
                     </td>
                     <td className="p-3.5 text-slate-600 font-mono">
-                      {promo.expiryDate}
+                      {toPersianDigits(promo.expiryDate)}
                     </td>
                     <td className="p-3.5">
                       <span className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${

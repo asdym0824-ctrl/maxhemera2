@@ -18,6 +18,7 @@ import {
   User
 } from 'lucide-react';
 import { MedicalVectorPattern } from '../common/medicalPattern/MedicalVectorPattern';
+import { toPersianDigits } from '../../utils/persianWriting';
 
 interface MobileSpecialtiesModalProps {
   isOpen: boolean;
@@ -229,7 +230,7 @@ export const MobileSpecialtiesModal: React.FC<MobileSpecialtiesModalProps> = ({
                   <div className="flex items-center gap-2 shrink-0">
                     <span className="text-[10px] font-bold text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded-lg flex items-center gap-1">
                       <Users className="w-3 h-3" />
-                      <span>{spec.doctorCount} پزشک</span>
+                      <span>{toPersianDigits(spec.doctorCount)} پزشک</span>
                     </span>
                     <ChevronLeft className="w-4 h-4 text-slate-400" />
                   </div>

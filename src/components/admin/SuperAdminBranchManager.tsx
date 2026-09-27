@@ -16,6 +16,11 @@ import {
   Sparkles
 } from 'lucide-react';
 import { ClinicBranch } from '../../types';
+import { 
+  toPersianDigits, 
+  formatPersianPhone, 
+  FaPhone 
+} from '../../utils/persianWriting';
 
 interface SuperAdminBranchManagerProps {
   branches: ClinicBranch[];
@@ -134,7 +139,7 @@ export const SuperAdminBranchManager: React.FC<SuperAdminBranchManagerProps> = (
                 <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-sm shrink-0">
                   {branch.code}
                 </div>
-                <div>
+                  <div>
                   <div className="flex items-center gap-2">
                     <h3 className="font-extrabold text-base text-slate-900">{branch.name}</h3>
                     {branch.isMain && (
@@ -144,7 +149,7 @@ export const SuperAdminBranchManager: React.FC<SuperAdminBranchManagerProps> = (
                     )}
                   </div>
                   <span className="text-xs text-slate-500 font-medium">
-                    {branch.city} • منطقه {branch.district || 'شهرداری'}
+                    {branch.city} • منطقه {branch.district ? toPersianDigits(branch.district) : 'مرکزی'}
                   </span>
                 </div>
               </div>
@@ -161,17 +166,17 @@ export const SuperAdminBranchManager: React.FC<SuperAdminBranchManagerProps> = (
 
             <p className="text-xs text-slate-600 leading-relaxed flex items-start gap-1.5">
               <MapPin className="w-4 h-4 text-slate-400 shrink-0 mt-0.5" />
-              <span>{branch.address} {branch.floorAndUnit ? `(${branch.floorAndUnit})` : ''}</span>
+              <span>{toPersianDigits(branch.address)} {branch.floorAndUnit ? `(${toPersianDigits(branch.floorAndUnit)})` : ''}</span>
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-200/70 text-center text-xs">
               <div className="bg-white p-2.5 rounded-xl border border-slate-200/60">
                 <span className="text-[10px] text-slate-400 block">پزشکان شیفت</span>
-                <span className="font-black text-slate-900 mt-0.5 block">{branch.todayPresentDoctorsCount || 8} نفر</span>
+                <span className="font-black text-slate-900 mt-0.5 block">{toPersianDigits(branch.todayPresentDoctorsCount || 8)} نفر</span>
               </div>
               <div className="bg-white p-2.5 rounded-xl border border-slate-200/60">
                 <span className="text-[10px] text-slate-400 block">میانگین صف</span>
-                <span className="font-black text-amber-600 mt-0.5 block">{branch.currentQueueWaitMinutes || 12} دقیقه</span>
+                <span className="font-black text-amber-600 mt-0.5 block">{toPersianDigits(branch.currentQueueWaitMinutes || 12)} دقیقه</span>
               </div>
               <div className="bg-white p-2.5 rounded-xl border border-slate-200/60">
                 <span className="text-[10px] text-slate-400 block">پذیرش حضوری</span>
@@ -203,13 +208,13 @@ export const SuperAdminBranchManager: React.FC<SuperAdminBranchManagerProps> = (
 
             {/* Contact details */}
             <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-200/60 text-xs">
-              <span className="text-slate-600 flex items-center gap-1 font-mono font-bold" dir="ltr">
+              <span className="text-slate-700 flex items-center gap-1.5 font-bold">
                 <Phone className="w-3.5 h-3.5 text-slate-400" />
-                {branch.phone}
+                <FaPhone phone={branch.phone} />
               </span>
               <span className="text-slate-500 text-[11px] flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
-                {branch.workingHours}
+                {toPersianDigits(branch.workingHours)}
               </span>
             </div>
           </div>

@@ -26,6 +26,7 @@ import {
 import { Button } from '../components/common/Button';
 import { MedicalLoadingIndicator } from '../components/common/MedicalLoadingIndicator';
 import { MedicalVectorPattern } from '../components/common/medicalPattern/MedicalVectorPattern';
+import { toPersianDigits } from '../utils/persianWriting';
 
 interface DoctorSearchPageProps {
   initialSearchQuery?: string;
@@ -277,7 +278,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
                 }`}
               >
                 <span>{spec.name.replace('متخصص ', '').replace('فوق تخصص ', '')}</span>
-                <span className="text-[10px] opacity-75">({spec.doctorCount})</span>
+                <span className="text-[10px] opacity-75">({toPersianDigits(spec.doctorCount)})</span>
               </button>
             );
           })}
@@ -286,7 +287,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
             className="px-3 py-1.5 rounded-xl text-xs font-bold shrink-0 bg-blue-600/60 hover:bg-blue-600 text-white flex items-center gap-1 cursor-pointer transition-colors border border-blue-400/40"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>سایر ({specialties.length - 8})...</span>
+            <span>سایر ({toPersianDigits(specialties.length - 8)})...</span>
           </button>
         </div>
 
@@ -438,7 +439,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
               </div>
               <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
                 <span className="text-xs text-emerald-300 bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-400/30 font-bold whitespace-nowrap">
-                  {doctors.length} پزشک مرتبط یافت شد
+                  {toPersianDigits(doctors.length)} پزشک مرتبط یافت شد
                 </span>
                 <button
                   onClick={() => setSearchQuery('')}
@@ -486,7 +487,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
               </div>
               <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
                 <span className="text-xs text-emerald-300 bg-emerald-500/20 px-3 py-1.5 rounded-xl border border-emerald-400/30 font-bold whitespace-nowrap">
-                  {doctors.length} متخصص آماده ویزیت
+                  {toPersianDigits(doctors.length)} متخصص آماده ویزیت
                 </span>
                 <button
                   onClick={() => setSearchQuery('')}
@@ -502,7 +503,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
           <div className="flex items-center justify-between text-xs text-slate-500 font-medium pb-2 border-b border-slate-200/80">
             <div className="flex items-center gap-2 flex-wrap">
               <span>
-                نمایش <strong className="text-slate-900 font-bold">{displayedDoctors.length}</strong> از <strong className="text-slate-900 font-bold">{doctors.length}</strong> پزشک متخصص
+                نمایش <strong className="text-slate-900 font-bold">{toPersianDigits(displayedDoctors.length)}</strong> از <strong className="text-slate-900 font-bold">{toPersianDigits(doctors.length)}</strong> پزشک متخصص
               </span>
               {selectedSpecialtyId && (
                 <button
@@ -594,7 +595,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
                   <div className="w-full sm:w-1/2 space-y-1">
                     <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
                       <span>پیشرفت نمایش پزشکان</span>
-                      <span>{displayedDoctors.length} از {doctors.length}</span>
+                      <span>{toPersianDigits(displayedDoctors.length)} از {toPersianDigits(doctors.length)}</span>
                     </div>
                     <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
                       <div 
@@ -615,7 +616,7 @@ export const DoctorSearchPage: React.FC<DoctorSearchPageProps> = ({
                   ) : (
                     <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-xl flex items-center gap-1">
                       <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>همه {doctors.length} پزشک متخصص نمایش داده شدند</span>
+                      <span>همه {toPersianDigits(doctors.length)} پزشک متخصص نمایش داده شدند</span>
                     </span>
                   )}
                 </div>

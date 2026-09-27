@@ -45,6 +45,13 @@ import {
 } from 'lucide-react';
 import { Badge } from '../components/common/Badge';
 import { resolveDoctorWebsiteStatus, getWebsiteStatusMeta, getDoctorSubdomain } from '../utils/doctorWebsiteUtils';
+import { 
+  toPersianDigits, 
+  formatPersianPrice, 
+  formatPersianNumber, 
+  formatPersianPhone,
+  FaPhone 
+} from '../utils/persianWriting';
 
 // Super Admin Modular Subcomponents
 import { SuperAdminCommandHub } from '../components/admin/SuperAdminCommandHub';
@@ -422,7 +429,7 @@ export const AdminDashboardPage: React.FC = () => {
             {/* Filter Pills */}
             <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold">
               {[
-                { id: 'all', label: `همه (${doctors.length})` },
+                { id: 'all', label: `همه (${toPersianDigits(doctors.length)})` },
                 { id: 'published', label: 'منتشر شده', color: 'text-emerald-700' },
                 { id: 'draft', label: 'پیش‌نویس', color: 'text-amber-700' },
                 { id: 'disabled', label: 'غیرفعال', color: 'text-slate-600' },
@@ -563,7 +570,7 @@ export const AdminDashboardPage: React.FC = () => {
               </p>
             </div>
 
-            <Badge variant="blue">پایش وفاداری ({crmRecords.length} پرونده)</Badge>
+            <Badge variant="blue">پایش وفاداری ({toPersianDigits(crmRecords.length)} پرونده)</Badge>
           </div>
 
           {/* CRM Filter & Search */}
@@ -584,7 +591,7 @@ export const AdminDashboardPage: React.FC = () => {
                   crmStatusFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs font-extrabold' : 'text-slate-600'
                 }`}
               >
-                همه ({crmRecords.length})
+                همه ({toPersianDigits(crmRecords.length)})
               </button>
               <button
                 type="button"
@@ -625,20 +632,25 @@ export const AdminDashboardPage: React.FC = () => {
                 {filteredCrm.map(crm => (
                   <tr key={crm.patientId} className="hover:bg-slate-50/70 transition-colors">
                     <td className="p-3.5 font-bold text-slate-900">{crm.name}</td>
-                    <td className="p-3.5 font-mono text-slate-600" dir="ltr">{crm.phone}</td>
+                    <td className="p-3.5">
+                      <FaPhone phone={crm.phone} className="text-slate-600 font-bold" />
+                    </td>
                     <td className="p-3.5">
                       <Badge variant={crm.status === 'vip' ? 'amber' : crm.status === 'followup_needed' ? 'rose' : 'blue'}>
                         {crm.status === 'vip' ? 'مشتری VIP' : crm.status === 'followup_needed' ? 'نیازمند پیگیری' : 'بیمار فعال'}
                       </Badge>
                     </td>
-                    <td className="p-3.5 font-bold text-slate-800">{crm.lifetimeVisits} ویزیت</td>
-                    <td className="p-3.5 font-extrabold text-blue-700">{crm.totalSpent.toLocaleString('fa-IR')} تومان</td>
-                    <td className="p-3.5 text-slate-600">{crm.lastVisitDate}</td>
-                    <td className="p-3.5 font-bold text-rose-600">{crm.nextFollowUpDate || 'ثبت نشده'}</td>
+                    <td className="p-3.5 font-bold text-slate-800">{toPersianDigits(crm.lifetimeVisits)} ویزیت</td>
+                    <td className="p-3.5 font-extrabold text-blue-700">{formatPersianPrice(crm.totalSpent)}</td>
+                    <td className="p-3.5 text-slate-600">{toPersianDigits(crm.lastVisitDate)}</td>
+                    <td className="p-3.5 font-bold text-rose-600">{crm.nextFollowUpDate ? toPersianDigits(crm.nextFollowUpDate) : 'ثبت نشده'}</td>
                     <td className="p-3.5 text-center">
                       <button
                         type="button"
-                        onClick={() => alert(`ثبت پیگیری و ارسال پیامک مراقبتی برای ${crm.name} انجام شد.`)}
+                        onClick={() => {
+                          setBroadcastMessage(`پیگیری و پیامک مراقبتی برای ${crm.name} ارسال شد.`);
+                          setTimeout(() => setBroadcastMessage(null), 3500);
+                        }}
                         className="px-2.5 py-1.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 font-bold text-xs transition-colors cursor-pointer"
                       >
                         ثبت پیگیری

@@ -27,6 +27,12 @@ import {
 } from 'lucide-react';
 import { AdminKPIs, ClinicBranch, ActivityLog } from '../../types';
 import { Badge } from '../common/Badge';
+import { 
+  toPersianDigits, 
+  formatPersianPercent, 
+  formatPersianPrice, 
+  formatPersianNumber 
+} from '../../utils/persianWriting';
 
 interface SuperAdminCommandHubProps {
   kpis: AdminKPIs;
@@ -85,7 +91,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
                 <h2 className="text-base sm:text-lg font-black text-white">مرکز فرماندهی زیرساخت و سلامت سرویس‌ها</h2>
                 <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-full border border-emerald-800">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  تمام سرویس‌ها نرمال (99.98% Uptime)
+                  تمام سرویس‌ها پایدار (۹۹.۹۸٪ پایداری)
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
@@ -144,7 +150,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             <div>
               <div className="text-[11px] text-slate-400">پایگاه داده اصلی</div>
               <div className="text-xs font-bold text-slate-200 mt-0.5">PostgreSQL / Drizzle</div>
-              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">Latency: 22ms • OK</div>
+              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">تاخیر: ۲۲ میلی‌ثانیه • پایدار</div>
             </div>
             <Database className="w-4 h-4 text-emerald-400" />
           </div>
@@ -153,7 +159,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             <div>
               <div className="text-[11px] text-slate-400">وب‌سرویس پیامک (SMS)</div>
               <div className="text-xs font-bold text-slate-200 mt-0.5">کاوه‌نگار / خط ۱۰۰۰</div>
-              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">شارژ: ۱,۴۵۰,۰۰۰ تومان</div>
+              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">شارژ: ۱،۴۵۰،۰۰۰ تومان</div>
             </div>
             <Radio className="w-4 h-4 text-sky-400" />
           </div>
@@ -171,7 +177,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             <div>
               <div className="text-[11px] text-slate-400">موتور هوش مصنوعی بالینی</div>
               <div className="text-xs font-bold text-slate-200 mt-0.5">Gemini Clinical Engine</div>
-              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">140ms • آماده پاسخ</div>
+              <div className="text-[10px] text-emerald-400 font-mono mt-0.5">۱۴۰ میلی‌ثانیه • آماده پاسخ</div>
             </div>
             <Sparkles className="w-4 h-4 text-amber-400" />
           </div>
@@ -201,7 +207,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.todayRevenue.toLocaleString('fa-IR')} <span className="text-xs font-normal text-slate-500">تومان</span>
+            {formatPersianPrice(kpis.todayRevenue)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-emerald-600 font-bold flex items-center gap-0.5">
@@ -224,7 +230,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {Math.round(kpis.todayRevenue * 0.3).toLocaleString('fa-IR')} <span className="text-xs font-normal text-slate-500">تومان</span>
+            {formatPersianPrice(Math.round(kpis.todayRevenue * 0.3))}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-slate-500">میانگین ۳۰٪ کارمزد پزشکان</span>
@@ -244,10 +250,10 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.todayAppointments} <span className="text-xs font-normal text-slate-500">نوبت</span>
+            {toPersianDigits(kpis.todayAppointments)} <span className="text-xs font-normal text-slate-500">نوبت</span>
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
-            <span className="text-slate-600 font-bold">{kpis.todayPatients} بیمار پذیرش شده</span>
+            <span className="text-slate-600 font-bold">{toPersianDigits(kpis.todayPatients)} بیمار پذیرش‌شده</span>
             <span className="text-purple-600 font-semibold text-[10px]">اتاق‌های ویزیت ←</span>
           </div>
         </div>
@@ -264,7 +270,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.activeDoctorsCount} <span className="text-xs font-normal text-slate-500">پزشک در شیفت</span>
+            {toPersianDigits(kpis.activeDoctorsCount)} <span className="text-xs font-normal text-slate-500">پزشک در شیفت</span>
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-emerald-600 font-bold">۱۰۰٪ پوشش تخصص‌ها</span>
@@ -284,7 +290,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.avgWaitTimeMinutes} <span className="text-xs font-normal text-slate-500">دقیقه</span>
+            {toPersianDigits(kpis.avgWaitTimeMinutes)} <span className="text-xs font-normal text-slate-500">دقیقه</span>
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-emerald-600 font-semibold">۶ دقیقه بهینه‌تر از استاندارد</span>
@@ -304,10 +310,10 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.noShowRatePercent}٪
+            {formatPersianPercent(kpis.noShowRatePercent)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
-            <span className="text-emerald-600 font-bold">بسیار عالی (زیر ۵٪)</span>
+            <span className="text-emerald-600 font-bold">بسیار عالی (کم‌تر از ۵٪)</span>
             <span className="text-rose-600 text-[10px]">بازیابی نوبت ←</span>
           </div>
         </div>
@@ -324,7 +330,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {kpis.patientSatisfactionPercent}٪
+            {formatPersianPercent(kpis.patientSatisfactionPercent)}
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-slate-500">بر اساس ۳۴۲ ارزیابی معتبر</span>
@@ -344,7 +350,7 @@ export const SuperAdminCommandHub: React.FC<SuperAdminCommandHubProps> = ({
             </div>
           </div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {branches.length} <span className="text-xs font-normal text-slate-500">شعبه فعال</span>
+            {toPersianDigits(branches.length)} <span className="text-xs font-normal text-slate-500">شعبه فعال</span>
           </div>
           <div className="flex items-center justify-between text-[11px] pt-1 border-t border-slate-100">
             <span className="text-emerald-600 font-bold">تمام شعب آنلاین و پذیرنده</span>
