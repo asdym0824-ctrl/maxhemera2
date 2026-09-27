@@ -47,7 +47,6 @@ import { ClinicalCornerAccents } from '../components/common/medicalPattern/Clini
 import { MedicalVectorPattern } from '../components/common/medicalPattern/MedicalVectorPattern';
 import { MobileDoctoretoReviews, PatientReview } from '../components/reviews/MobileDoctoretoReviews';
 import { MobileDoctoretoArticles } from '../components/health/MobileDoctoretoArticles';
-import { toPersianDigits } from '../utils/persianWriting';
 
 interface HomePageProps {
   doctors: Doctor[];
@@ -498,7 +497,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                             <div className="sticky top-0 z-10 px-4 py-2 bg-gradient-to-r from-emerald-50 to-teal-50/70 border-b border-emerald-100 text-xs font-bold text-emerald-950 flex items-center justify-between backdrop-blur-xs">
                               <span className="flex items-center gap-1.5">
                                 <Stethoscope className="w-4 h-4 text-emerald-600" />
-                                <span>تخصص‌های پزشکی یافت شده ({toPersianDigits(liveMatchedSpecialties.length)})</span>
+                                <span>تخصص‌های پزشکی یافت شده ({liveMatchedSpecialties.length})</span>
                               </span>
                               <span className="text-[10px] text-emerald-600">مشاهده دپارتمان و پزشکان</span>
                             </div>
@@ -537,7 +536,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                                   </div>
                                   <div className="flex items-center gap-2 shrink-0">
                                     <span className="hidden sm:inline-block text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
-                                      {toPersianDigits(spec.doctorCount)} پزشک متخصص
+                                      {spec.doctorCount} پزشک متخصص
                                     </span>
                                     <button
                                       type="button"
@@ -564,7 +563,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                             <div className="sticky top-0 z-10 px-4 py-2 bg-gradient-to-r from-blue-50 to-indigo-50/70 border-b border-blue-100 text-xs font-bold text-blue-900 flex items-center justify-between backdrop-blur-xs">
                               <span className="flex items-center gap-1.5">
                                 <Building2 className="w-4 h-4 text-blue-600" />
-                                <span>بیمارستان‌ها و مراکز درمانی ({toPersianDigits(liveMatchedHospitals.length)})</span>
+                                <span>بیمارستان‌ها و مراکز درمانی ({liveMatchedHospitals.length})</span>
                               </span>
                               <span className="text-[10px] text-blue-600">مشاهده پزشکان و نوبت‌دهی</span>
                             </div>
@@ -597,7 +596,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                                   <div className="flex items-center gap-2 shrink-0">
                                     {hosp.activeDoctorsCount && (
                                       <span className="hidden sm:inline-block text-[10px] font-semibold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md border border-blue-200">
-                                        {toPersianDigits(hosp.activeDoctorsCount)} پزشک فعال
+                                        {hosp.activeDoctorsCount} پزشک فعال
                                       </span>
                                     )}
                                     <button
@@ -624,7 +623,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                             <div className="sticky top-0 z-10 px-4 py-2 bg-slate-50 border-b border-slate-100 text-xs font-bold text-slate-600 flex items-center justify-between backdrop-blur-xs">
                               <span className="flex items-center gap-1.5">
                                 <Users className="w-4 h-4 text-blue-600" />
-                                <span>پزشکان یافت شده ({toPersianDigits(liveMatchedDoctors.length)})</span>
+                                <span>پزشکان یافت شده ({liveMatchedDoctors.length})</span>
                               </span>
                               <span className="text-[10px] text-blue-600">انتخاب جهت نوبت‌دهی فوری</span>
                             </div>
@@ -665,7 +664,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                                   <div className="flex items-center gap-2 shrink-0">
                                     {doc.nextAvailableSlot && (
                                       <span className="hidden sm:inline-block text-[10px] font-semibold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-md border border-emerald-200">
-                                        نوبت خالی: {toPersianDigits(doc.nextAvailableSlot)}
+                                        نوبت خالی: {doc.nextAvailableSlot}
                                       </span>
                                     )}
                                     <button
@@ -1034,7 +1033,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             icon={<ChevronLeft className="w-4 h-4" />}
             iconPosition="left"
           >
-            مشاهده و جستجوی همه ({toPersianDigits(specialties.length)})
+            مشاهده و جستجوی همه ({specialties.length})
           </Button>
         </div>
 
@@ -1045,7 +1044,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         >
           <div className="flex items-center gap-2 text-xs font-bold text-blue-900 min-w-0">
             <Search className="w-4 h-4 text-blue-600 shrink-0" />
-            <span className="truncate">جستجو در {toPersianDigits(specialties.length)} تخصص کلینیک (قلب، پوست، زانو...)</span>
+            <span className="truncate">جستجو در {specialties.length} تخصص کلینیک (قلب، پوست، زانو...)</span>
           </div>
           <span className="text-[10px] bg-blue-600 text-white font-bold px-2 py-0.5 rounded-lg shrink-0">
             فهرست کامل
@@ -1077,7 +1076,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 {spec.name.replace('متخصص ', '').replace('فوق تخصص ', '')}
               </h3>
               <span className="text-[9px] text-slate-400 font-medium">
-                {toPersianDigits(spec.doctorCount)} پزشک
+                {spec.doctorCount} پزشک
               </span>
             </div>
           ))}
@@ -1094,7 +1093,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               + سایر تخصص‌ها
             </h3>
             <span className="text-[9px] text-blue-100 font-medium">
-              +{toPersianDigits(specialties.length - 7)} مورد
+              +{specialties.length - 7} مورد
             </span>
           </div>
         </div>
@@ -1115,7 +1114,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   {spec.name}
                 </h3>
                 <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium truncate">
-                  {toPersianDigits(spec.doctorCount)} پزشک فعال
+                  {spec.doctorCount} پزشک فعال
                 </p>
               </div>
             </div>
@@ -1145,7 +1144,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             icon={<ChevronLeft className="w-4 h-4" />}
             iconPosition="left"
           >
-            جستجوی پیشرفته ({toPersianDigits(doctors.length)})
+            جستجوی پیشرفته ({doctors.length})
           </Button>
         </div>
 
@@ -1254,7 +1253,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <span className={`text-[10px] px-1 py-0.2 rounded-md ${
                 selectedSpecialtyChip === spec.id ? 'bg-blue-700 text-white' : 'bg-slate-200/80 text-slate-500'
               }`}>
-                {toPersianDigits(spec.doctorCount)}
+                {spec.doctorCount}
               </span>
             </button>
           ))}
@@ -1271,7 +1270,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="flex items-center justify-between text-xs text-slate-600 font-medium pt-1 pb-1 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <span>
-              نمایش <strong className="text-slate-900 font-extrabold">{toPersianDigits(displayedDoctors.length)}</strong> از <strong className="text-slate-900 font-extrabold">{toPersianDigits(totalMatchingDoctors.length)}</strong> پزشک
+              نمایش <strong className="text-slate-900 font-extrabold">{displayedDoctors.length}</strong> از <strong className="text-slate-900 font-extrabold">{totalMatchingDoctors.length}</strong> پزشک
             </span>
             {selectedSpecialtyChip !== 'all' && (
               <button
@@ -1360,7 +1359,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="w-full sm:w-1/2 space-y-1">
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-600">
                 <span>پیشرفت نمایش پزشکان</span>
-                <span>{toPersianDigits(displayedDoctors.length)} از {toPersianDigits(totalMatchingDoctors.length)}</span>
+                <span>{displayedDoctors.length} از {totalMatchingDoctors.length}</span>
               </div>
               <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
                 <div 
@@ -1383,7 +1382,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               ) : (
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>همه {toPersianDigits(totalMatchingDoctors.length)} پزشک نمایش داده شدند</span>
+                  <span>همه {totalMatchingDoctors.length} پزشک نمایش داده شدند</span>
                 </span>
               )}
 
@@ -1448,7 +1447,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             onClick={() => navigate('/services')}
             className="inline-flex items-center gap-1 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-[11px] sm:text-xs font-bold text-white bg-slate-800/90 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 shadow-sm transition-all cursor-pointer select-none active:scale-[0.98] shrink-0"
           >
-            <span>همه ({toPersianDigits(services.length)})</span>
+            <span>همه ({services.length})</span>
             <ChevronLeft className="w-3.5 h-3.5 text-slate-300 shrink-0" />
           </button>
         </div>
@@ -1466,7 +1465,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
               }`}
             >
-              همه ({toPersianDigits(services.length)})
+              همه ({services.length})
             </button>
             {availableServiceCategories.map(cat => (
               <button
@@ -1567,7 +1566,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="flex items-center justify-between text-[10px] text-slate-400 px-1 pt-0.5">
                 <span>← برای مشاهده سایر خدمات به چپ بکشید</span>
                 <span className="text-indigo-300 font-bold">
-                  {toPersianDigits(Math.min(6, (filteredServices.length > 0 ? filteredServices : services).length))} خدمت فعال
+                  {Math.min(6, (filteredServices.length > 0 ? filteredServices : services).length)} خدمت فعال
                 </span>
               </div>
             </div>
@@ -1594,7 +1593,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                         )}
                         <span className="text-slate-600 text-[8px]">•</span>
                         <span className="text-[10px] text-slate-400 font-mono">
-                          {toPersianDigits(srv.price.toLocaleString('fa-IR'))} ت
+                          {srv.price.toLocaleString('fa-IR')} ت
                         </span>
                       </div>
                     </div>
@@ -1625,7 +1624,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               </div>
               <div className="pt-3 border-t border-slate-700 flex items-center justify-between">
                 <span className="font-extrabold text-sm text-indigo-300">
-                  {toPersianDigits(srv.price.toLocaleString('fa-IR'))} تومان
+                  {srv.price.toLocaleString('fa-IR')} تومان
                 </span>
                 <Button variant="primary" size="sm" onClick={() => navigate(`/services/${srv.slug}`)}>
                   جزئیات و رزرو
@@ -1715,7 +1714,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             iconPosition="left"
             className="text-xs shrink-0"
           >
-            <span>آرشیو مجله ({toPersianDigits(articles.length)})</span>
+            <span>آرشیو مجله ({articles.length})</span>
           </Button>
         </div>
 

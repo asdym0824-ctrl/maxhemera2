@@ -18,11 +18,6 @@ import {
   Receipt
 } from 'lucide-react';
 import { Doctor } from '../../types';
-import { 
-  toPersianDigits, 
-  formatPersianPrice, 
-  formatPersianNumber 
-} from '../../utils/persianWriting';
 
 interface DoctorSettlementRecord {
   doctorId: string;
@@ -164,9 +159,9 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
             <DollarSign className="w-4 h-4 text-slate-400" />
           </div>
           <div className="text-2xl font-black text-slate-900">
-            {formatPersianPrice(totalGross)}
+            {totalGross.toLocaleString('fa-IR')} <span className="text-xs font-normal text-slate-500">تومان</span>
           </div>
-          <div className="text-[11px] text-slate-500">از محل {toPersianDigits(settlements.reduce((sum, s) => sum + s.consultationCount, 0))} ویزیت در کلیه شعب</div>
+          <div className="text-[11px] text-slate-500">از محل {settlements.reduce((sum, s) => sum + s.consultationCount, 0)} ویزیت در کلیه شعب</div>
         </div>
 
         <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-2">
@@ -175,9 +170,9 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
             <Clock className="w-4 h-4 text-amber-600" />
           </div>
           <div className="text-2xl font-black text-amber-900">
-            {formatPersianPrice(totalDoctorPayable)}
+            {totalDoctorPayable.toLocaleString('fa-IR')} <span className="text-xs font-normal text-amber-700">تومان</span>
           </div>
-          <div className="text-[11px] text-amber-700 font-medium">حواله پایا برای {toPersianDigits(settlements.filter(s => s.status === 'pending').length)} پزشک آماده صدور است</div>
+          <div className="text-[11px] text-amber-700 font-medium">حواله پایا برای {settlements.filter(s => s.status === 'pending').length} پزشک آماده صدور است</div>
         </div>
 
         <div className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 space-y-2">
@@ -186,7 +181,7 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
             <TrendingUp className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-2xl font-black text-emerald-900">
-            {formatPersianPrice(totalClinicRevenue)}
+            {totalClinicRevenue.toLocaleString('fa-IR')} <span className="text-xs font-normal text-emerald-700">تومان</span>
           </div>
           <div className="text-[11px] text-emerald-700 font-medium">میانگین ۳۰٪ کارمزد سازمانی کلینیک</div>
         </div>
@@ -203,7 +198,7 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          دفتر کل تسویه‌حساب پزشکان ({toPersianDigits(settlements.length)})
+          دفتر کل تسویه‌حساب پزشکان ({settlements.length})
         </button>
         <button
           type="button"
@@ -214,7 +209,7 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
               : 'text-slate-600 hover:bg-slate-100'
           }`}
         >
-          خط اعتباری و مطالبات بیمه‌ای ({toPersianDigits(insuranceClaims.length)})
+          خط اعتباری و مطالبات بیمه‌ای ({insuranceClaims.length})
         </button>
       </div>
 
@@ -263,21 +258,21 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
                     </td>
 
                     <td className="p-3.5 font-bold text-slate-800">
-                      {toPersianDigits(record.consultationCount)} ویزیت
+                      {record.consultationCount} ویزیت
                     </td>
 
                     <td className="p-3.5 font-extrabold text-slate-900">
-                      {formatPersianPrice(record.grossRevenue)}
+                      {record.grossRevenue.toLocaleString('fa-IR')} ت
                     </td>
 
                     <td className="p-3.5">
-                      <span className="font-black text-emerald-700">{formatPersianPrice(record.doctorShareAmount)}</span>
-                      <span className="text-[10px] text-slate-400 block font-mono">({toPersianDigits(record.doctorSharePercent)}٪ سهم پزشک)</span>
+                      <span className="font-black text-emerald-700">{record.doctorShareAmount.toLocaleString('fa-IR')} ت</span>
+                      <span className="text-[10px] text-slate-400 block font-mono">({record.doctorSharePercent}٪ سهم پزشک)</span>
                     </td>
 
                     <td className="p-3.5">
-                      <span className="font-bold text-purple-700">{formatPersianPrice(record.clinicShareAmount)}</span>
-                      <span className="text-[10px] text-slate-400 block font-mono">({toPersianDigits(100 - record.doctorSharePercent)}٪ کلینیک)</span>
+                      <span className="font-bold text-purple-700">{record.clinicShareAmount.toLocaleString('fa-IR')} ت</span>
+                      <span className="text-[10px] text-slate-400 block font-mono">({100 - record.doctorSharePercent}٪ کلینیک)</span>
                     </td>
 
                     <td className="p-3.5">
@@ -339,8 +334,8 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
               {insuranceClaims.map(claim => (
                 <tr key={claim.id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="p-3.5 font-bold text-slate-900">{claim.name}</td>
-                  <td className="p-3.5 font-semibold text-slate-700">{toPersianDigits(claim.totalClaims)} پرونده ویزیت</td>
-                  <td className="p-3.5 font-black text-blue-700 text-sm">{formatPersianPrice(claim.amount)}</td>
+                  <td className="p-3.5 font-semibold text-slate-700">{claim.totalClaims} پرونده ویزیت</td>
+                  <td className="p-3.5 font-black text-blue-700 text-sm">{claim.amount.toLocaleString('fa-IR')} تومان</td>
                   <td className="p-3.5">
                     <span className="bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full font-bold text-[11px] border border-blue-100">
                       {claim.status}
@@ -349,10 +344,7 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
                   <td className="p-3.5 text-center">
                     <button
                       type="button"
-                      onClick={() => {
-                        setSettleSuccessMsg(`صورتحساب تجمیعی ${claim.name} به مبلغ ${formatPersianPrice(claim.amount)} جهت وصول صادر گردید.`);
-                        setTimeout(() => setSettleSuccessMsg(null), 4000);
-                      }}
+                      onClick={() => alert(`صورتحساب تجمیعی ${claim.name} به مبلغ ${claim.amount.toLocaleString('fa-IR')} تومان جهت دریافت وجه صادر شد.`)}
                       className="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-colors cursor-pointer text-xs"
                     >
                       {claim.action}
@@ -395,17 +387,17 @@ export const SuperAdminFinanceEngine: React.FC<SuperAdminFinanceEngineProps> = (
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">کارکرد ماهانه:</span>
-                  <span className="font-bold text-slate-800">{toPersianDigits(selectedSettlement.consultationCount)} ویزیت</span>
+                  <span className="font-bold text-slate-800">{selectedSettlement.consultationCount} ویزیت</span>
                 </div>
               </div>
 
               <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900 space-y-1 text-center">
                 <span className="text-xs text-emerald-700 block">مبلغ قابل واریز (خالص سهم پزشک):</span>
                 <span className="text-2xl font-black block">
-                  {formatPersianPrice(selectedSettlement.doctorShareAmount)}
+                  {selectedSettlement.doctorShareAmount.toLocaleString('fa-IR')} <span className="text-xs font-normal">تومان</span>
                 </span>
                 <span className="text-[11px] text-emerald-600 block mt-1">
-                  (محاسبه شده بر مبنای {toPersianDigits(selectedSettlement.doctorSharePercent)}٪ سهم پزشک از کل {formatPersianPrice(selectedSettlement.grossRevenue)})
+                  (محاسبه شده بر مبنای {selectedSettlement.doctorSharePercent}٪ سهم پزشک از کل {selectedSettlement.grossRevenue.toLocaleString('fa-IR')} تومان)
                 </span>
               </div>
 

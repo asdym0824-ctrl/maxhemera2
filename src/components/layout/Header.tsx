@@ -1021,7 +1021,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="absolute left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 text-slate-800 z-50 animate-in fade-in zoom-in-95 font-sans" dir="rtl">
                   <div className="px-4 py-3 border-b border-slate-100 bg-slate-50/70">
                     <div className="font-bold text-sm text-slate-900">{currentUser.name}</div>
-                    <div className="text-xs text-rose-600 font-semibold mt-0.5">سوپر‌ادمین و مدیر ارشد سیستم</div>
+                    <div className="text-xs text-rose-600 font-semibold mt-0.5">سوپر ادمین و مدیر ارشد سیستم</div>
                   </div>
 
                   <div className="p-1 space-y-1 text-xs font-semibold">
@@ -1049,7 +1049,7 @@ export const Header: React.FC<HeaderProps> = ({
                       className="w-full text-right px-3 py-2 hover:bg-rose-50 text-slate-700 rounded-xl flex items-center gap-2 transition-colors"
                     >
                       <DollarSign className="w-4 h-4 text-emerald-600" />
-                      <span>تسویه‌حساب و کارمزد پزشکان</span>
+                      <span>تسویه حساب و کارمزد پزشکان</span>
                     </Link>
 
                     <Link

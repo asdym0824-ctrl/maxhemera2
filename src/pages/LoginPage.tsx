@@ -992,7 +992,7 @@ export const LoginPage: React.FC<{ onSuccess?: (user: User) => void }> = ({ onSu
                           className="flex-1 py-2 sm:py-2.5 px-3 bg-gradient-to-r from-rose-50 to-pink-50 hover:from-rose-600 hover:to-pink-600 text-rose-900 hover:text-white rounded-xl border border-rose-300 hover:border-rose-600 transition-all cursor-pointer font-extrabold text-xs text-center shadow-xs flex items-center justify-center gap-1.5 active:scale-95 group"
                         >
                           <ShieldAlert className="w-3.5 h-3.5 text-rose-600 group-hover:text-white shrink-0 transition-colors" />
-                          <span>سوپر‌ادمین سیستم</span>
+                          <span>سوپر ادمین سیستم</span>
                         </button>
                       )}
                     </div>

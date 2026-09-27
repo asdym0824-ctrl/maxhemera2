@@ -1,7 +1,6 @@
 import React from 'react';
 import { Doctor } from '../../types';
 import { Clock, Star, Calendar, Video, MapPin, ChevronLeft } from 'lucide-react';
-import { toPersianDigits } from '../../utils/persianWriting';
 
 interface DoctorCompactCardProps {
   doctor: Doctor;
@@ -52,7 +51,7 @@ export const DoctorCompactCard: React.FC<DoctorCompactCardProps> = ({
             </h4>
             <span className="text-[10px] text-amber-600 font-bold flex items-center gap-0.5 bg-amber-50 px-1.5 py-0.2 rounded-md shrink-0">
               <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
-              <span>{toPersianDigits(doctor.rating)}</span>
+              <span>{doctor.rating}</span>
             </span>
           </div>
 
@@ -63,7 +62,7 @@ export const DoctorCompactCard: React.FC<DoctorCompactCardProps> = ({
           <div className="flex items-center gap-2 text-[10px] text-slate-500">
             <span className="flex items-center gap-0.5 text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded-md font-medium shrink-0">
               <Clock className="w-2.5 h-2.5 text-emerald-600" />
-              <span>نوبت: {toPersianDigits(doctor.nextAvailableSlot)}</span>
+              <span>نوبت: {doctor.nextAvailableSlot}</span>
             </span>
             {(doctor.hospitalName || (doctor.hospitals && doctor.hospitals.length > 0)) && (
               <span className="hidden md:inline-flex items-center gap-0.5 text-indigo-700 bg-indigo-50 px-1.5 py-0.2 rounded-md font-medium shrink-0">

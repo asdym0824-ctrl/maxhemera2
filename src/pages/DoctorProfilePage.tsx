@@ -17,7 +17,6 @@ import { MedicalVectorPattern } from '../components/common/medicalPattern/Medica
 import { useAuth } from '../context/AuthContext';
 import { bookingIntentService } from '../services/bookingIntentService';
 import { isWebsitePubliclyVisible, canPreviewDoctorWebsite, resolveDoctorWebsiteStatus, getDoctorSubdomain } from '../utils/doctorWebsiteUtils';
-import { toPersianDigits } from '../utils/persianWriting';
 
 interface DoctorProfilePageProps {
   doctorSlug?: string;
@@ -127,12 +126,12 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
               </div>
 
               <p className="text-sm text-blue-300 font-semibold">{doctor.title}</p>
-              <p className="text-xs text-slate-400">کد نظام پزشکی: {toPersianDigits(doctor.medicalCouncilNumber)}</p>
+              <p className="text-xs text-slate-400">کد نظام پزشکی: {doctor.medicalCouncilNumber}</p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs">
                 <Rating value={doctor.rating} count={doctor.reviewCount} size="md" />
                 <span className="text-slate-400">•</span>
-                <span className="text-slate-300">{toPersianDigits(doctor.experienceYears)} سال سابقه درمان</span>
+                <span className="text-slate-300">{doctor.experienceYears} سال سابقه درمان</span>
                 <span className="text-slate-400">•</span>
                 <span className="text-slate-300">شهر: {doctor.city}</span>
                 {(doctor.hospitalName || (doctor.hospitals && doctor.hospitals.length > 0)) && (
@@ -191,7 +190,7 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
               { id: 'about', label: 'بیوگرافی و مدارک' },
               { id: 'services', label: 'خدمات تخصصی' },
               { id: 'insurances', label: 'بیمه‌های طرف قرارداد' },
-              { id: 'reviews', label: `نظرات بیماران (${toPersianDigits(reviews.length)})` }
+              { id: 'reviews', label: `نظرات بیماران (${reviews.length})` }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -276,8 +275,8 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
             <div className="bg-white rounded-2xl border border-slate-200/80 p-6 space-y-6 shadow-xs text-xs">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                 <div>
-                  <div className="text-2xl font-black text-slate-900">{toPersianDigits(doctor.rating.toFixed(1))} / ۵</div>
-                  <div className="text-slate-500 text-xs">بر اساس {toPersianDigits(doctor.reviewCount)} نظر بیماران</div>
+                  <div className="text-2xl font-black text-slate-900">{doctor.rating.toFixed(1)} / ۵</div>
+                  <div className="text-slate-500 text-xs">بر اساس {doctor.reviewCount} نظر بیماران</div>
                 </div>
                 <div className="space-y-1 text-slate-600">
                   <div>رفتار پزشک: ۵.۰ ★</div>
@@ -291,7 +290,7 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
                   <div key={rev.id} className="p-4 rounded-xl border border-slate-200/80 space-y-2">
                     <div className="flex justify-between items-center font-bold text-slate-900">
                       <span>{rev.patientName}</span>
-                      <span className="text-slate-400 font-normal text-[11px]">{toPersianDigits(rev.date)}</span>
+                      <span className="text-slate-400 font-normal text-[11px]">{rev.date}</span>
                     </div>
                     <Rating value={rev.rating} size="sm" showValue={false} />
                     <p className="text-slate-700 leading-relaxed font-medium">{rev.comment}</p>
@@ -307,19 +306,19 @@ export const DoctorProfilePage: React.FC<DoctorProfilePageProps> = ({
           <div className="sticky top-24 bg-white rounded-3xl border border-slate-200 p-6 shadow-lg space-y-5 text-xs">
             <div className="border-b border-slate-100 pb-3">
               <div className="font-extrabold text-base text-slate-900">دریافت نوبت از {doctor.name}</div>
-              <div className="text-blue-600 font-semibold mt-0.5">نزدیک‌ترین زمان: {toPersianDigits(doctor.nextAvailableSlot)}</div>
+              <div className="text-blue-600 font-semibold mt-0.5">نزدیک‌ترین زمان: {doctor.nextAvailableSlot}</div>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between py-1 border-b border-slate-100">
                 <span className="text-slate-500">ویزیت حضوری:</span>
-                <span className="font-bold text-slate-900">{toPersianDigits(doctor.consultationFee.toLocaleString('fa-IR'))} تومان</span>
+                <span className="font-bold text-slate-900">{doctor.consultationFee.toLocaleString('fa-IR')} تومان</span>
               </div>
               {doctor.hasOnlineConsultation && (
                 <div className="flex justify-between py-1 border-b border-slate-100">
                   <span className="text-slate-500">مشاوره آنلاین تصویری:</span>
                   <span className="font-bold text-sky-700">
-                    {toPersianDigits((doctor.onlineConsultationFee || 280000).toLocaleString('fa-IR'))} تومان
+                    {(doctor.onlineConsultationFee || 280000).toLocaleString('fa-IR')} تومان
                   </span>
                 </div>
               )}

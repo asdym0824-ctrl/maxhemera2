@@ -1,6 +1,5 @@
 import React from 'react';
 import { Star } from 'lucide-react';
-import { toPersianDigits } from '../../utils/persianWriting';
 
 interface RatingProps {
   value: number;
@@ -28,18 +27,18 @@ export const Rating: React.FC<RatingProps> = ({
   };
 
   return (
-    <div className="flex items-center gap-1.5" dir="rtl">
+    <div className="flex items-center gap-1.5">
       <div className="flex items-center text-amber-400 fill-amber-400">
         <Star className={`${iconSizes[size]} fill-amber-400`} />
       </div>
       {showValue && (
         <span className={`font-semibold text-slate-800 ${textSizes[size]}`}>
-          {toPersianDigits(value.toFixed(1))}
+          {value.toFixed(1)}
         </span>
       )}
       {count !== undefined && (
         <span className={`text-slate-400 font-normal ${textSizes[size]}`}>
-          ({toPersianDigits(count)} نظر)
+          ({count} نظر)
         </span>
       )}
     </div>

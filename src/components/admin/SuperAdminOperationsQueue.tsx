@@ -14,11 +14,6 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { ClinicBranch, Appointment } from '../../types';
-import { 
-  toPersianDigits, 
-  formatPersianPhone, 
-  FaPhone 
-} from '../../utils/persianWriting';
 
 interface SuperAdminOperationsQueueProps {
   branches: ClinicBranch[];
@@ -89,26 +84,26 @@ export const SuperAdminOperationsQueue: React.FC<SuperAdminOperationsQueueProps>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
         <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/70 space-y-1">
           <span className="text-amber-700 block text-[11px] font-semibold">بیماران حاضر در سالن انتظار</span>
-          <span className="text-2xl font-black text-amber-900 block">{toPersianDigits(arrivedList.length || 7)} نفر</span>
+          <span className="text-2xl font-black text-amber-900 block">{arrivedList.length || 7} نفر</span>
           <span className="text-[10px] text-amber-600">اعلام حضور در باجه تریاژ</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/70 space-y-1">
           <span className="text-blue-700 block text-[11px] font-semibold">در حال ویزیت در مطب‌ها</span>
-          <span className="text-2xl font-black text-blue-900 block">{toPersianDigits(inVisitList.length || 11)} پزشک فعال</span>
+          <span className="text-2xl font-black text-blue-900 block">{inVisitList.length || 11} پزشک فعال</span>
           <span className="text-[10px] text-blue-600">اتاق‌های معاینه در حال استفاده</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 space-y-1">
           <span className="text-emerald-700 block text-[11px] font-semibold">ویزیت‌های تکمیل‌شده امروز</span>
-          <span className="text-2xl font-black text-emerald-900 block">{toPersianDigits(completedList.length || 38)} بیمار</span>
+          <span className="text-2xl font-black text-emerald-900 block">{completedList.length || 38} بیمار</span>
           <span className="text-[10px] text-emerald-600">ثبت شرح حال و صدور نسخه</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-rose-50/70 border border-rose-200/70 space-y-1">
           <span className="text-rose-700 block text-[11px] font-semibold">عدم حضور / انصراف (No-Show)</span>
-          <span className="text-2xl font-black text-rose-900 block">{toPersianDigits(noShowList.length || 3)} مورد</span>
-          <span className="text-[10px] text-rose-600">نرخ ۳٫۸٪ (زیر حد مجاز استاندارد)</span>
+          <span className="text-2xl font-black text-rose-900 block">{noShowList.length || 3} مورد</span>
+          <span className="text-[10px] text-rose-600">نرخ ۳.۸٪ (زیر حد مجاز استاندارد)</span>
         </div>
       </div>
 
@@ -143,7 +138,7 @@ export const SuperAdminOperationsQueue: React.FC<SuperAdminOperationsQueueProps>
                 <span>عملکرد کلی شعب ۶ دقیقه بهتر از استاندارد ملی درمانگاه‌ها است.</span>
               </div>
               <p className="text-[11px]">
-                استفاده از سیستم نوبت‌دهی خودکار همرا کلینیک باعث جلوگیری از ازدحام همزمان در ساعات اوج (۱۷:۰۰ الی ۱۹:۰۰) شده است.
+                استفاده از سیستم نوبت‌دهی خودکار همرا کلینیک باعث جلوگیری از ازدحام همزمان در ساعات اوج (۱۷:۰۰ تا ۱۹:۰۰) شده است.
               </p>
             </div>
           </div>
@@ -170,13 +165,7 @@ export const SuperAdminOperationsQueue: React.FC<SuperAdminOperationsQueueProps>
               <div key={idx} className="p-3 rounded-2xl bg-white border border-slate-200 flex items-center justify-between gap-3">
                 <div>
                   <span className="font-bold text-slate-900 block">{item.name}</span>
-                  <div className="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5">
-                    <span>{item.doc}</span>
-                    <span>•</span>
-                    <span>{toPersianDigits(item.time)}</span>
-                    <span>•</span>
-                    <FaPhone phone={item.phone} className="text-slate-600 font-bold" />
-                  </div>
+                  <span className="text-[11px] text-slate-500">{item.doc} • {item.time}</span>
                   <span className="text-[10px] text-rose-600 block mt-0.5">{item.reason}</span>
                 </div>
 

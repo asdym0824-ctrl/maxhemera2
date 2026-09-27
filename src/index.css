@@ -25,31 +25,6 @@
     text-align: right;
     background-color: var(--bg);
     color: var(--ink);
-    font-feature-settings: "ss01" 1;
-    font-variant-numeric: tabular-nums;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  [dir="ltr"],
-  .font-mono,
-  input[type="tel"],
-  input[type="email"],
-  input[type="password"],
-  pre,
-  code {
-    font-feature-settings: "ss01" 0;
-  }
-
-  .persian-nums {
-    font-feature-settings: "ss01" 1;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .bidi-ltr {
-    direction: ltr;
-    unicode-bidi: isolate;
-    text-align: left;
   }
 }
 

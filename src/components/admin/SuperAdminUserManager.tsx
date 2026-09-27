@@ -22,12 +22,6 @@ import {
 } from 'lucide-react';
 import { User, UserRole, AppPermission } from '../../types';
 import { Badge } from '../common/Badge';
-import { 
-  toPersianDigits, 
-  formatPersianPhone, 
-  formatPersianNationalId, 
-  FaPhone 
-} from '../../utils/persianWriting';
 
 interface SuperAdminUserManagerProps {
   users: User[];
@@ -189,14 +183,14 @@ export const SuperAdminUserManager: React.FC<SuperAdminUserManagerProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
         <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/70">
           <span className="text-slate-400 block text-[11px]">کل کاربران ثبت‌شده</span>
-          <span className="text-lg font-black text-slate-900 mt-0.5 block">{toPersianDigits(users.length)} حساب</span>
+          <span className="text-lg font-black text-slate-900 mt-0.5 block">{users.length} حساب</span>
           <span className="text-[10px] text-slate-500">پزشکان، پرسنل و مراجعین</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-blue-50/60 border border-blue-100">
           <span className="text-blue-600 block text-[11px] font-semibold">پزشکان متخصص</span>
           <span className="text-lg font-black text-blue-900 mt-0.5 block">
-            {toPersianDigits(users.filter(u => u.role === 'doctor').length)} نفر
+            {users.filter(u => u.role === 'doctor').length} نفر
           </span>
           <span className="text-[10px] text-blue-500">دارای پروانه و وبسایت مطب</span>
         </div>
@@ -204,7 +198,7 @@ export const SuperAdminUserManager: React.FC<SuperAdminUserManagerProps> = ({
         <div className="p-4 rounded-2xl bg-purple-50/60 border border-purple-100">
           <span className="text-purple-600 block text-[11px] font-semibold">کادر اداری و پذیرش</span>
           <span className="text-lg font-black text-purple-900 mt-0.5 block">
-            {toPersianDigits(users.filter(u => ['secretary', 'reception', 'clinic_manager', 'nurse'].includes(u.role)).length)} نفر
+            {users.filter(u => ['secretary', 'reception', 'clinic_manager', 'nurse'].includes(u.role)).length} نفر
           </span>
           <span className="text-[10px] text-purple-500">مدیران و پرسنل شعب ۵ گانه</span>
         </div>
@@ -212,7 +206,7 @@ export const SuperAdminUserManager: React.FC<SuperAdminUserManagerProps> = ({
         <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100">
           <span className="text-rose-600 block text-[11px] font-semibold">مدیران ارشد سامانه</span>
           <span className="text-lg font-black text-rose-900 mt-0.5 block">
-            {toPersianDigits(users.filter(u => ['super_admin', 'admin'].includes(u.role)).length)} نفر
+            {users.filter(u => ['super_admin', 'admin'].includes(u.role)).length} نفر
           </span>
           <span className="text-[10px] text-rose-500">دسترسی تام و نظارتی</span>
         </div>
@@ -240,7 +234,7 @@ export const SuperAdminUserManager: React.FC<SuperAdminUserManagerProps> = ({
               roleFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            همه نقش‌ها ({toPersianDigits(users.length)})
+            همه نقش‌ها ({users.length})
           </button>
           {ALL_ROLES.slice(0, 5).map(r => (
             <button
@@ -287,17 +281,15 @@ export const SuperAdminUserManager: React.FC<SuperAdminUserManagerProps> = ({
                       />
                       <div>
                         <div className="font-extrabold text-slate-900">{user.name}</div>
-                        <div className="text-[11px] text-slate-400 font-mono">ID: {toPersianDigits(user.id)}</div>
+                        <div className="text-[11px] text-slate-400 font-mono">ID: {user.id}</div>
                       </div>
                     </div>
                   </td>
 
                   <td className="p-3.5">
                     <div className="space-y-0.5">
-                      <FaPhone phone={user.phone} className="font-bold text-slate-800 block" />
-                      <span className="text-[11px] text-slate-400">
-                        کدملی: {user.nationalId ? toPersianDigits(user.nationalId) : 'ثبت نشده'}
-                      </span>
+                      <span className="font-mono text-slate-800 font-semibold block" dir="ltr">{user.phone}</span>
+                      <span className="text-[11px] text-slate-400">کدملی: {user.nationalId || 'ثبت نشده'}</span>
                     </div>
                   </td>
 
