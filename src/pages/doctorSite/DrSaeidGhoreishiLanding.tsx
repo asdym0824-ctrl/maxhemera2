@@ -22,10 +22,17 @@ import {
   Check,
   Building,
   User,
-  ArrowUpRight
+  ArrowUpRight,
+  Menu,
+  MessageCircle,
+  Sparkles,
+  Award,
+  Camera,
+  BadgeCheck
 } from 'lucide-react';
 import clinicHeroBg from '../../assets/images/clinic_hero_bg_1790232681712.jpg';
 import drGhorashiSentPhotoBg from '../../assets/images/dr_ghorashi_sent_photo_bg_1790240799866.jpg';
+import drGhorashiHdHero from '../../assets/images/dr_ghorashi_hd_hero_1790512460920.jpg';
 import doctorClinicScene from '../../assets/images/doctor_clinic_scene_1790233258607.jpg';
 import drGhorashiInterviewFrame from '../../assets/images/dr_ghorashi_interview_frame_1790235134649.jpg';
 import orthoCase1 from '../../assets/images/ortho_case_1_1790235827023.jpg';
@@ -86,6 +93,20 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
   // Newsletter State
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+
+  // Horizontal scroll refs for mobile & slider navigation
+  const testimonialsScrollRef = useRef<HTMLDivElement>(null);
+  const clinicsScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollContainer = (containerRef: React.RefObject<HTMLDivElement | null>, direction: 'left' | 'right') => {
+    if (containerRef.current) {
+      const scrollAmount = containerRef.current.clientWidth * 0.8;
+      containerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   // Scrollspy to set active menu
   useEffect(() => {
@@ -581,96 +602,103 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
             </a>
           </nav>
 
-          {/* Left: Action Pill Buttons (Positioned on the Far Left) */}
+          {/* Left: Action Pill Buttons & Mobile Menu Toggle */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Dark Navy Pill Button: رزرو نوبت مشاوره */}
+            {/* Dark Navy Pill Button: رزرو نوبت مشاوره (Desktop / Tablet only) */}
             <button 
               onClick={() => openBookingModalWithPreselect()}
-              className="inline-flex items-center gap-2 bg-[#0c324c] hover:bg-[#082438] text-white font-black text-xs sm:text-[13.5px] px-4 sm:px-5 py-2.5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap"
+              className="hidden md:inline-flex items-center gap-2 bg-[#0c324c] hover:bg-[#082438] text-white font-black text-xs sm:text-[13.5px] px-4 sm:px-5 py-2.5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap"
             >
               <span>رزرو نوبت مشاوره</span>
               <Calendar className="w-4 h-4 text-white shrink-0" />
             </button>
 
-            {/* Gold Pill Button: نوبت رایگان (Far Left edge of screen) */}
+            {/* Gold Pill Button: نوبت رایگان (Visible on both mobile & desktop) */}
             <button 
               type="button"
               onClick={() => openBookingModalWithPreselect()}
-              className="inline-flex items-center gap-2 bg-[#f0bc3f] hover:bg-[#e4b036] text-[#0c324c] font-black text-xs sm:text-[13.5px] px-4 sm:px-5 py-2.5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#f0bc3f] hover:bg-[#e4b036] text-[#0c324c] font-black text-xs sm:text-[13.5px] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-xs transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap cursor-pointer"
             >
-              <span>نوبت رایگان</span>
-              <Phone className="w-4 h-4 fill-current rotate-[-15deg] shrink-0" />
+              <span className="hidden xs:inline">نوبت رایگان</span>
+              <span className="xs:hidden">نوبت</span>
+              <Phone className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-current rotate-[-15deg] shrink-0" />
             </button>
 
-            {/* Mobile menu toggle */}
+            {/* Mobile menu toggle with modern icon */}
             <button 
-              className="xl:hidden bg-none border-0 text-2xl text-[#0b3b60] cursor-pointer p-1"
+              className="xl:hidden w-10 h-10 rounded-full bg-slate-50 border border-slate-200/80 flex items-center justify-center text-[#0b3b60] hover:bg-slate-100 cursor-pointer transition-colors active:scale-95 shrink-0"
               onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="باز کردن منو"
+              aria-label={menuOpen ? "بستن منو" : "باز کردن منو"}
             >
-              ☰
+              {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Nav Dropdown */}
+        {/* Mobile Nav Drawer */}
         {menuOpen && (
-          <div className="md:hidden bg-white border-t border-[#e5edf1] px-5 py-4 shadow-xl flex flex-col gap-2 font-bold text-sm">
+          <div className="xl:hidden bg-white/98 backdrop-blur-xl border-t border-slate-100 px-5 py-4 shadow-2xl flex flex-col gap-1.5 font-bold text-sm animate-in slide-in-from-top-2 duration-200">
             <a 
               href="#home" 
-              onClick={(e) => scrollToSection(e, 'home')}
-              className="py-2.5 text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'home'); }}
+              className="py-3 px-3 rounded-xl text-[#0b3b60] bg-sky-50/60 font-black flex items-center justify-between"
             >
-              خانه
+              <span>صفحه اصلی</span>
+              <span className="text-xs text-sky-600">خانه</span>
             </a>
             <a 
               href="#about" 
-              onClick={(e) => scrollToSection(e, 'about')}
-              className="py-2.5 text-slate-700 hover:text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'about'); }}
+              className="py-3 px-3 rounded-xl text-slate-700 hover:text-[#0b3b60] hover:bg-slate-50 transition-colors flex items-center justify-between"
             >
-              درباره دکتر قریشی
+              <span>درباره دکتر سعید قریشی</span>
+              <span className="text-xs text-slate-400">سابقه و افتخارات</span>
             </a>
             <a 
               href="#services" 
-              onClick={(e) => scrollToSection(e, 'services')}
-              className="py-2.5 text-slate-700 hover:text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'services'); }}
+              className="py-3 px-3 rounded-xl text-slate-700 hover:text-[#0b3b60] hover:bg-slate-50 transition-colors flex items-center justify-between"
             >
-              خدمات تخصصی
+              <span>خدمات تخصصی ارتودنسی</span>
+              <span className="text-xs text-slate-400">۷ خدمت</span>
             </a>
             <a 
               href="#results" 
-              onClick={(e) => scrollToSection(e, 'results')}
-              className="py-2.5 text-slate-700 hover:text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'results'); }}
+              className="py-3 px-3 rounded-xl text-slate-700 hover:text-[#0b3b60] hover:bg-slate-50 transition-colors flex items-center justify-between"
             >
-              نتایج درمان‌ها
+              <span>نتایج درمان و قبل/بعد</span>
+              <span className="text-xs text-slate-400">گالری لبخند</span>
             </a>
             <a 
               href="#clinics" 
-              onClick={(e) => scrollToSection(e, 'clinics')}
-              className="py-2.5 text-slate-700 hover:text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'clinics'); }}
+              className="py-3 px-3 rounded-xl text-slate-700 hover:text-[#0b3b60] hover:bg-slate-50 transition-colors flex items-center justify-between"
             >
-              مراکز درمانی
+              <span>مراکز درمانی و مطب‌ها</span>
+              <span className="text-xs text-slate-400">۵ شعبه</span>
             </a>
             <a 
               href="#contact" 
-              onClick={(e) => scrollToSection(e, 'contact')}
-              className="py-2.5 text-slate-700 hover:text-[#0b3b60] border-b border-slate-100"
+              onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'contact'); }}
+              className="py-3 px-3 rounded-xl text-slate-700 hover:text-[#0b3b60] hover:bg-slate-50 transition-colors flex items-center justify-between"
             >
-              اطلاعات تماس
+              <span>اطلاعات تماس و مشاوره</span>
+              <span className="text-xs text-slate-400">آدرس و تلفن</span>
             </a>
-            <div className="pt-3 flex gap-2">
+            <div className="pt-3 flex gap-2 border-t border-slate-100 mt-2">
               <button 
                 type="button"
                 onClick={() => { setMenuOpen(false); openBookingModalWithPreselect(); }}
-                className="btn-custom btn-primary-custom flex-1 text-xs py-2.5"
+                className="btn-custom btn-primary-custom flex-1 text-xs py-3 rounded-xl font-black shadow-sm"
               >
-                نوبت رایگان
+                رزرو نوبت رایگان
               </button>
               <button 
                 onClick={() => { setMenuOpen(false); openBookingModalWithPreselect(); }}
-                className="btn-custom btn-dark-custom flex-1 text-xs py-2.5"
+                className="btn-custom btn-dark-custom flex-1 text-xs py-3 rounded-xl font-bold shadow-sm"
               >
-                رزرو مشاوره
+                مشاوره اختصاصی
               </button>
             </div>
           </div>
@@ -678,118 +706,369 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
       </header>
 
       {/* Main Content */}
-      <main id="home">
-        {/* Hero Section */}
-        <section className="hero-banner relative bg-gradient-to-b from-[#f8fafc] via-[#f1f6fa] to-[#edf3f8] py-8 lg:py-14 border-b border-slate-100">
-          <div className="container-custom grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-12 relative z-10 hero-grid">
-            {/* Doctor Column (RIGHT side on desktop: Col 1-6 in RTL) - Clean unedited photo */}
-            <div className="lg:col-span-6 order-2 lg:order-1 flex items-center justify-center relative select-none">
-              <img 
-                className="doctor-hero-photo w-full max-w-[580px] h-auto object-cover rounded-2xl shadow-xl border border-white" 
-                src={drGhorashiSentPhotoBg}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/assets/dr-ghorashi-hero-bg.jpg';
-                }}
-                alt="دکتر سعید قریشی متخصص ارتودنسی" 
-                referrerPolicy="no-referrer"
-              />
+      <main id="home" className="pb-20 sm:pb-0">
+        {/* ========================================================================= */}
+        {/* 1. MOBILE-ONLY ULTRA-LUXURY HERO (sm:hidden) */}
+        {/* ========================================================================= */}
+        <section className="block sm:hidden bg-gradient-to-b from-[#f8fafc] via-[#f0f5fa] to-white pt-3 pb-7 border-b border-slate-100 overflow-hidden select-none">
+          
+          {/* A. Mobile Clinical VIP Story Highlights Carousel */}
+          <div className="px-4 mb-4">
+            <div className="flex items-center gap-3.5 overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-1">
+              {/* Story 1: قبل و بعد */}
+              <a 
+                href="#results" 
+                onClick={(e) => scrollToSection(e, 'results')}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#dfa938] via-[#8be022] to-[#05263f] shadow-sm">
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-white bg-slate-100">
+                    <img src={orthoCase1} alt="قبل و بعد" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">قبل و بعد</span>
+              </a>
+
+              {/* Story 2: ارتودنسی نامرئی */}
+              <a 
+                href="#services" 
+                onClick={(e) => scrollToSection(e, 'services')}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#dfa938] via-[#38bdf8] to-[#05263f] shadow-sm">
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-white bg-[#05263f] flex items-center justify-center text-white">
+                    <Sparkles className="w-5 h-5 text-[#8be022]" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">نامرئی</span>
+              </a>
+
+              {/* Story 3: مراکز درمانی */}
+              <a 
+                href="#clinics" 
+                onClick={(e) => scrollToSection(e, 'clinics')}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#05263f] via-[#0ea5e9] to-[#dfa938] shadow-sm">
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-white bg-slate-100">
+                    <img src={clinicBranch1} alt="مراکز درمانی" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">۴ شعبه</span>
+              </a>
+
+              {/* Story 4: ویدیو مصاحبه */}
+              <button 
+                type="button"
+                onClick={() => setVideoModalOpen(true)}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform cursor-pointer"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-rose-500 via-[#dfa938] to-[#05263f] shadow-sm relative">
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-white bg-slate-100">
+                    <img src={drGhorashiInterviewFrame} alt="ویدیو مصاحبه" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-rose-500 text-white flex items-center justify-center shadow-xs">
+                    <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+                  </span>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">مصاحبه</span>
+              </button>
+
+              {/* Story 5: نظرات مراجعین */}
+              <a 
+                href="#testimonials" 
+                onClick={(e) => scrollToSection(e, 'testimonials')}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#dfa938] via-amber-400 to-[#05263f] shadow-sm">
+                  <div className="w-full h-full rounded-full overflow-hidden border-2 border-white bg-slate-100">
+                    <img src={patientAvatar1} alt="نظرات بیماران" className="w-full h-full object-cover" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">رضایت</span>
+              </a>
+
+              {/* Story 6: رزرو نوبت */}
+              <button 
+                type="button"
+                onClick={() => openBookingModalWithPreselect()}
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform cursor-pointer"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#8be022] via-[#05263f] to-[#dfa938] shadow-sm">
+                  <div className="w-full h-full rounded-full border-2 border-white bg-[#8be022] flex items-center justify-center text-[#05263f]">
+                    <Calendar className="w-5 h-5 stroke-[2.3]" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">رزرو نوبت</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="container-custom px-4">
+            
+            {/* B. Top Specialist Micro Badges */}
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#dfa938]/40 shadow-xs text-[#b5861b] text-[11px] font-black">
+                <Award className="w-3.5 h-3.5 text-[#dfa938]" />
+                <span>رتبه برتر بورد تخصصی ارتودنسی</span>
+              </div>
+              <div className="inline-flex items-center gap-1 text-[11px] font-bold text-[#05263f] bg-white/70 px-2.5 py-1 rounded-full border border-slate-200">
+                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                <span>عضو AAO آمریکا</span>
+              </div>
+            </div>
+
+            {/* C. Hero Visual Presentation Card for Dr. Saeid Ghorashi */}
+            <div className="relative rounded-[28px] overflow-hidden bg-gradient-to-b from-[#062c49] via-[#05263f] to-[#041c2f] p-2.5 pb-0 shadow-[0_16px_36px_rgba(5,38,63,0.18)] border border-slate-700/30 mb-5">
+              
+              {/* Doctor Photo & Clinic Setting */}
+              <div className="relative h-[310px] rounded-[22px] overflow-hidden bg-[#05263f]">
+                <img 
+                  src={drGhorashiHdHero}
+                  alt="دکتر سعید قریشی متخصص ارتودنسی" 
+                  className="w-full h-full object-cover object-[78%_top] filter contrast-[1.08] saturate-[1.12]"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/assets/dr_ghorashi_hd_hero.jpg';
+                  }}
+                  referrerPolicy="no-referrer"
+                />
+
+                {/* Subtle soft gradient fade ONLY at the bottom behind the ribbon (top 75% is completely clear) */}
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#041e33] to-transparent pointer-events-none"></div>
+
+                {/* Floating Micro-Badge Top Right: بورد تخصصی ناسیونال */}
+                <div className="absolute top-2.5 right-2.5 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/20 flex items-center gap-1 shadow-md">
+                  <Star className="w-3 h-3 text-[#dfa938] fill-current" />
+                  <span>بورد تخصصی ناسیونال</span>
+                </div>
+
+                {/* Floating Micro-Badge Top Left: بیش از ۲۰ سال سابقه */}
+                <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-md text-[#05263f] text-[10px] font-black px-2.5 py-1 rounded-full border border-white/60 shadow-md flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-[#05263f]" />
+                  <span>۲۰+ سال تجربه</span>
+                </div>
+
+                {/* Bottom Profile Namecard Overlay */}
+                <div className="absolute bottom-2.5 inset-x-2.5 p-3 rounded-2xl bg-white/95 backdrop-blur-md border border-white shadow-lg text-right">
+                  <div className="flex items-center justify-between mb-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <h3 className="text-[17px] font-black text-[#05263f] tracking-tight">
+                        دکتر سعید قریشی
+                      </h3>
+                      <BadgeCheck className="w-4 h-4 text-sky-500 fill-current" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#fbf5e8] text-[#b5861b] border border-[#f1deaa]">
+                      عضو بنیاد نخبگان
+                    </span>
+                  </div>
+                  <p className="text-[11.5px] font-bold text-[#607d94]">
+                    متخصص ارتودنسی و ارتوپدی فک و صورت
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* D. Punchy Value Proposition & Typography */}
+            <div className="text-center mb-5 px-1">
+              <h1 className="text-[22px] font-black leading-[1.35] text-[#05263f] tracking-normal mb-2">
+                طراحی ماندگار لبخند با جدیدترین تکنیک‌های روز دنیا
+              </h1>
+              <p className="text-xs text-[#48657b] font-medium leading-[1.9] max-w-[340px] mx-auto">
+                ارتودنسی نامرئی، سیستم‌های دیمون و درمان ناهنجاری‌های فکی بدون جراحی، با بالاترین استاندارد در ۴ مرکز تخصصی تهران و قم.
+              </p>
+            </div>
+
+            {/* E. Mobile VIP CTA Action Buttons */}
+            <div className="flex flex-col gap-2.5 mb-5">
+              {/* Primary Consultation Button */}
+              <button 
+                type="button"
+                onClick={() => openBookingModalWithPreselect()}
+                className="w-full bg-[#05263f] hover:bg-[#031b2e] active:scale-[0.98] text-white py-3.5 px-5 rounded-2xl font-black text-[13px] flex items-center justify-between shadow-[0_6px_20px_rgba(5,38,63,0.22)] transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center">
+                    <Calendar className="w-4 h-4 text-[#8be022]" />
+                  </div>
+                  <div className="text-right">
+                    <span className="block leading-none">رزرو نوبت معاینه و مشاوره حضوری</span>
+                    <span className="text-[10px] font-normal text-slate-300 mt-0.5">ویزیت اختصاصی در کلینیک</span>
+                  </div>
+                </div>
+                <ArrowLeft className="w-4 h-4 text-[#8be022]" />
+              </button>
+
+              {/* Secondary Instant Smile Assessment Button */}
+              <button 
+                type="button"
+                onClick={() => openBookingModalWithPreselect('طرح درمان و مشاوره آنلاین')}
+                className="w-full bg-[#8be022] hover:bg-[#7ecc1b] active:scale-[0.98] text-[#05263f] py-3.5 px-5 rounded-2xl font-black text-[13px] flex items-center justify-between shadow-[0_6px_20px_rgba(139,224,34,0.3)] transition-all cursor-pointer"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-[#05263f]/10 flex items-center justify-center">
+                    <Camera className="w-4 h-4 text-[#05263f]" />
+                  </div>
+                  <div className="text-right">
+                    <span className="block leading-none">ارزیابی آنلاین و ارسال عکس دندان‌ها</span>
+                    <span className="text-[10px] font-bold text-[#05263f]/75 mt-0.5">بررسی سریع توسط تیم دکتر قریشی (رایگان)</span>
+                  </div>
+                </div>
+                <ArrowLeft className="w-4 h-4 text-[#05263f]" />
+              </button>
+            </div>
+
+            {/* F. Quick Direct Clinic Hotline Bar */}
+            <a 
+              href="tel:02122886900" 
+              className="flex items-center justify-between p-3 rounded-2xl bg-[#edf5fa] border border-[#d2e4f0] text-[#05263f] mb-5 active:bg-[#e2eff7] transition-colors"
+            >
+              <div className="flex items-center gap-2 text-right">
+                <div className="w-7 h-7 rounded-lg bg-[#05263f] text-white flex items-center justify-center">
+                  <Phone className="w-3.5 h-3.5 fill-current" />
+                </div>
+                <div>
+                  <span className="text-[10.5px] text-[#5e7e95] block">تماس تلفنی مستقیم با منشی</span>
+                  <span className="text-xs font-black text-[#05263f]">۰۲۱-۲۲۸۸۶۹۰۰</span>
+                </div>
+              </div>
+              <span className="text-[10.5px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                پاسخگویی سریع
+              </span>
+            </a>
+
+            {/* G. Metric Cards Strip on Mobile */}
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div className="p-2.5 rounded-2xl bg-white border border-[#e8f0f6] shadow-xs">
+                <span className="block text-sm font-black text-[#05263f]">+۱۵,۰۰۰</span>
+                <span className="text-[10px] font-bold text-[#728c9f]">درمان موفق</span>
+              </div>
+              <div className="p-2.5 rounded-2xl bg-white border border-[#e8f0f6] shadow-xs">
+                <span className="block text-sm font-black text-[#05263f]">۴ شعبه</span>
+                <span className="text-[10px] font-bold text-[#728c9f]">تهران و قم</span>
+              </div>
+              <div className="p-2.5 rounded-2xl bg-white border border-[#e8f0f6] shadow-xs">
+                <span className="block text-sm font-black text-[#05263f]">۲۰+ سال</span>
+                <span className="text-[10px] font-bold text-[#728c9f]">سابقه تخصصی</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 2. DESKTOP/TABLET HERO (hidden sm:flex) */}
+        {/* ========================================================================= */}
+        <section className="hero-banner hidden sm:flex relative min-h-[640px] lg:min-h-[700px] xl:min-h-[740px] items-center py-8 lg:py-16 pb-20 sm:pb-28 border-b border-slate-100 overflow-hidden">
+          {/* Section Background Image (Authentic Doctor Photo) */}
+          <div className="absolute inset-0 z-0 select-none">
+            <img 
+              className="w-full h-full object-cover object-[83%_center] lg:object-[85%_center] filter contrast-[1.08] saturate-[1.12]" 
+              src={drGhorashiHdHero}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/assets/dr_ghorashi_hd_hero.jpg';
+              }}
+              alt="دکتر سعید قریشی متخصص ارتودنسی" 
+              referrerPolicy="no-referrer"
+            />
+            {/* White Backdrop ONLY on the left (0% to 52%) for text readability; 52% to 100% is 100% transparent so Dr. Ghorashi has ZERO haze or fade */}
+            <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_right,#ffffff_0%,#ffffff_36%,rgba(255,255,255,0.92)_44%,rgba(255,255,255,0)_52%,rgba(255,255,255,0)_100%)]"></div>
+          </div>
+
+          <div className="container-custom grid grid-cols-1 lg:grid-cols-12 items-center gap-8 lg:gap-12 relative z-10 hero-grid w-full">
+            {/* Right side spacer on desktop to let the doctor in the background remain fully visible */}
+            <div className="hidden lg:flex lg:col-span-6 order-2 lg:order-1 items-center justify-center relative select-none min-h-[300px]">
             </div>
 
             {/* Text Column (LEFT side on desktop: Col 7-12 in RTL) */}
-            <div className="lg:col-span-6 order-1 lg:order-2 py-4 sm:py-6 max-w-[560px] mx-auto text-center flex flex-col items-center justify-center">
+            <div className="lg:col-span-6 order-1 lg:order-2 py-8 max-w-[560px] mx-auto text-center flex flex-col items-center justify-center">
               {/* Golden Subtitle */}
-              <div className="text-[#c79a32] font-black text-sm sm:text-[15.5px] mb-2 tracking-normal">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 text-[#b5861b] font-black text-[15.5px] mb-2">
                 متخصص ارتودنسی و ناهنجاری‌های فکی
               </div>
 
               {/* Main Heading: دکتر سعید قریشی */}
-              <h1 className="text-4xl sm:text-5xl lg:text-[54px] font-black leading-[1.15] text-[#05263f] tracking-tight mb-2">
+              <h1 className="text-5xl lg:text-[54px] font-black leading-[1.25] text-[#05263f] tracking-normal mb-1.5">
                 دکتر سعید قریشی
               </h1>
 
               {/* Second Heading: متخصص ارتودنسی در تهران */}
-              <h2 className="text-2xl sm:text-3xl lg:text-[31px] font-black leading-tight text-[#072d4b] mb-4">
+              <h2 className="text-3xl lg:text-[31px] font-black leading-tight text-[#072d4b] tracking-normal mb-4">
                 متخصص ارتودنسی در تهران
               </h2>
 
               {/* Description paragraph (centered) */}
-              <p className="text-[#3c576c] font-medium text-sm sm:text-[15px] leading-[1.85] max-w-[490px] mb-7 mx-auto">
-                با بیش از ۲۰ سال تجربه در درمان‌های تخصصی ارتودنسی،
-                <br className="hidden sm:inline" />
-                با برنامه درمانی اختصاصی و استفاده از جدیدترین روش‌های علمی
-                <br className="hidden sm:inline" />
-                و تکنولوژی روز دنیا، لبخندی سالم و زیبا برای شما می‌سازم.
+              <p className="text-[#1e3c54] font-medium text-[15px] leading-[1.9] max-w-[490px] mb-7 mx-auto px-1">
+                با بیش از ۲۰ سال تجربه در درمان‌های تخصصی ارتودنسی، با برنامه درمانی اختصاصی و استفاده از جدیدترین روش‌های علمی، لبخندی سالم و زیبا برای شما می‌سازم.
               </p>
               
-              {/* CTA Action Buttons (side-by-side in RTL: Navy on right, Lime Green on left) */}
-              <div className="flex items-center justify-center gap-3.5 sm:gap-4 mb-8 flex-wrap">
-                {/* Dark Navy Pill Button: مشاهده نتایج درمان (Right in RTL) */}
+              {/* CTA Action Buttons */}
+              <div className="flex flex-row items-center justify-center gap-4 mb-8">
+                {/* Dark Navy Pill Button: مشاهده نتایج درمان */}
                 <a 
-                  className="bg-[#05263f] hover:bg-[#031b2e] text-white font-bold text-sm sm:text-[15px] px-8 py-3.5 rounded-full shadow-md transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap" 
+                  className="text-center bg-[#05263f] hover:bg-[#031b2e] text-white font-bold text-[15px] px-8 py-3.5 rounded-full shadow-[0_4px_16px_rgba(5,38,63,0.18)] transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap min-h-[48px] flex items-center justify-center gap-2" 
                   href="#results"
                   onClick={(e) => scrollToSection(e, 'results')}
                 >
-                  مشاهده نتایج درمان
+                  <span>مشاهده نتایج درمان</span>
+                  <CheckCircle2 className="w-4 h-4 text-[#8be022]" />
                 </a>
 
-                {/* Bright Lime Green Pill Button: ارائه طرح درمان دندان (Left in RTL) */}
+                {/* Bright Lime Green Pill Button: ارائه طرح درمان دندان */}
                 <a 
-                  className="bg-[#8be022] hover:bg-[#7ecc1b] text-[#05263f] font-black text-sm sm:text-[15px] px-8 py-3.5 rounded-full shadow-[0_4px_14px_rgba(139,224,34,0.35)] transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap" 
+                  className="text-center bg-[#8be022] hover:bg-[#7ecc1b] text-[#05263f] font-black text-[15px] px-8 py-3.5 rounded-full shadow-[0_4px_16px_rgba(139,224,34,0.35)] transition-all hover:scale-[1.02] active:scale-95 whitespace-nowrap min-h-[48px] flex items-center justify-center gap-2" 
                   href="#booking"
                   onClick={(e) => scrollToSection(e, 'booking')}
                 >
-                  ارائه طرح درمان دندان
+                  <span>ارائه طرح درمان دندان</span>
+                  <Calendar className="w-4 h-4 stroke-[2.2]" />
                 </a>
               </div>
 
-              {/* Statistics Strip (3 items with dividers) */}
-              <div className="flex items-center justify-center gap-0 max-w-[500px] mx-auto pt-2 select-none">
-                {/* Item 1 (Right): ۴ مرکز درمانی */}
-                <div className="flex flex-col items-center text-center px-4 sm:px-6">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#05263f] mb-1.5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 2H9c-1.1 0-2 .9-2 2v3H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 19H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm4 8H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V9h2v2zm0-4H9V5h2v2zm6 12h-4v-2h2v-2h-2v-2h2v-2h-2V9h4v10zm2-12h-2V5h2v2z"/>
-                  </svg>
-                  <span className="font-black text-[#05263f] text-base sm:text-lg whitespace-nowrap">۴ مرکز درمانی</span>
-                  <span className="font-semibold text-[#5a768c] text-xs mt-0.5 whitespace-nowrap">در تهران و قم</span>
-                </div>
+              {/* Statistics Strip - Responsive 3 Column Bar */}
+              <div className="w-full max-w-[500px] mx-auto select-none">
+                <div className="grid grid-cols-3 items-center divide-x divide-x-reverse divide-[#cfdbe2]">
+                  {/* Item 1 (Right): ۴ مرکز درمانی */}
+                  <div className="flex flex-col items-center text-center px-4">
+                    <svg className="w-5 h-5 text-[#05263f] mb-1" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M19 2H9c-1.1 0-2 .9-2 2v3H5c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM7 19H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm4 8H9v-2h2v2zm0-4H9v-2h2v2zm0-4H9V9h2v2zm0-4H9V5h2v2zm6 12h-4v-2h2v-2h-2v-2h2v-2h-2V9h4v10zm2-12h-2V5h2v2z"/>
+                    </svg>
+                    <span className="font-black text-[#05263f] text-base whitespace-nowrap">۴ مرکز درمانی</span>
+                    <span className="font-semibold text-[#5a768c] text-xs mt-0.5 whitespace-nowrap">تهران و قم</span>
+                  </div>
 
-                {/* Divider 1 */}
-                <div className="w-[1px] h-11 bg-[#cfdbe2] shrink-0"></div>
+                  {/* Item 2 (Center): رتبه برتر بورد تخصصی */}
+                  <div className="flex flex-col items-center text-center px-4">
+                    <svg className="w-5 h-5 text-[#05263f] mb-1" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                    </svg>
+                    <span className="font-black text-[#05263f] text-base whitespace-nowrap">رتبه برتر بورد</span>
+                    <span className="font-semibold text-[#5a768c] text-xs mt-0.5 whitespace-nowrap">تخصصی ارتودنسی</span>
+                  </div>
 
-                {/* Item 2 (Center): رتبه برتر بورد تخصصی */}
-                <div className="flex flex-col items-center text-center px-4 sm:px-6">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#05263f] mb-1.5" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                  </svg>
-                  <span className="font-black text-[#05263f] text-base sm:text-lg whitespace-nowrap">رتبه برتر بورد تخصصی</span>
-                  <span className="font-semibold text-[#5a768c] text-xs mt-0.5 whitespace-nowrap">در تهران و قم</span>
-                </div>
-
-                {/* Divider 2 */}
-                <div className="w-[1px] h-11 bg-[#cfdbe2] shrink-0"></div>
-
-                {/* Item 3 (Left): ۲۰+ سال تجربه */}
-                <div className="flex flex-col items-center text-center px-4 sm:px-6">
-                  <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#05263f] mb-1.5 fill-none stroke-[#05263f] stroke-[2.2]" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="8" strokeDasharray="3 2" />
-                    <circle cx="12" cy="12" r="4" fill="#05263f" />
-                  </svg>
-                  <span className="font-black text-[#05263f] text-base sm:text-lg whitespace-nowrap">۲۰+ سال تجربه</span>
+                  {/* Item 3 (Left): ۲۰+ سال تجربه */}
+                  <div className="flex flex-col items-center text-center px-4">
+                    <svg className="w-5 h-5 text-[#05263f] mb-1 fill-none stroke-[#05263f] stroke-[2.2]" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="8" strokeDasharray="3 2" />
+                      <circle cx="12" cy="12" r="4" fill="#05263f" />
+                    </svg>
+                    <span className="font-black text-[#05263f] text-base whitespace-nowrap">۲۰+ سال تجربه</span>
+                    <span className="font-semibold text-[#5a768c] text-xs mt-0.5 whitespace-nowrap">بالینی موفق</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Features / Value Trust Strip */}
-        <section className="relative z-20 text-white select-none -mt-10 sm:-mt-14 md:-mt-20">
-          {/* Asymmetric Wave Top Curve matching screenshot */}
+        {/* Features / Value Trust Strip (Selector 4) - 2x2 on Mobile, 4-col on Desktop */}
+        <section className="relative z-20 text-white select-none -mt-8 sm:-mt-14 md:-mt-20">
+          {/* Asymmetric Wave Top Curve */}
           <div className="w-full overflow-hidden leading-none relative z-10 pointer-events-none -mb-[1px]">
             <svg 
               viewBox="0 0 1440 95" 
               fill="none" 
               xmlns="http://www.w3.org/2000/svg" 
-              className="w-full h-[45px] sm:h-[65px] md:h-[88px] block text-[#04243d]"
+              className="w-full h-[36px] sm:h-[65px] md:h-[88px] block text-[#04243d]"
               preserveAspectRatio="none"
             >
               <path 
@@ -799,73 +1078,64 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
             </svg>
           </div>
 
-          {/* Deep Navy Container with 4 Trust Items and Divider Lines */}
-          <div className="bg-[#04243d] pt-2 pb-10 sm:pb-12 rounded-b-[28px] md:rounded-b-[40px] shadow-2xl">
-            <div className="container-custom max-w-6xl mx-auto flex flex-col sm:flex-row flex-wrap lg:flex-nowrap items-center justify-between gap-6 lg:gap-0">
+          {/* Deep Navy Container with 4 Trust Items in 2x2 grid on mobile */}
+          <div className="bg-[#04243d] pt-2 pb-8 sm:pb-12 rounded-b-[24px] md:rounded-b-[40px] shadow-2xl">
+            <div className="container-custom max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-0 items-center justify-between">
               {/* Item 1 (Right): تجربه، تخصص و اعتماد بیماران */}
-              <div className="flex-1 w-full sm:w-auto flex flex-col items-center text-center px-4">
-                <div className="w-14 h-14 rounded-full border-[1.5px] border-[#dfa938] flex items-center justify-center text-[#dfa938] mb-3.5 transition-transform hover:scale-105">
-                  <svg className="w-6 h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
+              <div className="flex flex-col items-center text-center p-3 sm:p-0 rounded-2xl bg-white/[0.04] sm:bg-transparent border border-white/[0.06] sm:border-none shadow-xs sm:shadow-none">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border-[1.5px] border-[#dfa938] bg-[#dfa938]/10 sm:bg-transparent flex items-center justify-center text-[#dfa938] mb-2 sm:mb-3.5 transition-transform hover:scale-105 shadow-sm">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                   </svg>
                 </div>
-                <div className="text-white font-bold text-sm sm:text-[15px] leading-[1.6]">
+                <div className="text-white font-bold text-[11.5px] sm:text-[15px] leading-[1.5]">
                   <p>تجربه، تخصص و</p>
                   <p>اعتماد بیماران</p>
                 </div>
               </div>
 
-              {/* Vertical Divider 1 */}
-              <div className="hidden lg:block w-[1px] h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent shrink-0"></div>
-
-              {/* Item 2 (Second from Right): استفاده از جدیدترین تکنولوژی‌های روز دنیا */}
-              <div className="flex-1 w-full sm:w-auto flex flex-col items-center text-center px-4">
-                <div className="w-14 h-14 rounded-full border-[1.5px] border-[#dfa938] flex items-center justify-center text-[#dfa938] mb-3.5 transition-transform hover:scale-105">
-                  <svg className="w-6 h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
+              {/* Item 2: استفاده از جدیدترین تکنولوژی‌های روز دنیا */}
+              <div className="flex flex-col items-center text-center p-3 sm:p-0 rounded-2xl bg-white/[0.04] sm:bg-transparent border border-white/[0.06] sm:border-none shadow-xs sm:shadow-none">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border-[1.5px] border-[#dfa938] bg-[#dfa938]/10 sm:bg-transparent flex items-center justify-center text-[#dfa938] mb-2 sm:mb-3.5 transition-transform hover:scale-105 shadow-sm">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
                     <path d="M9 3h6v2.5l2.5 3v12a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 6.5 20.5V8.5L9 5.5V3z" />
                     <circle cx="12" cy="4.2" r="0.6" fill="#dfa938" />
                     <path d="M9.5 13.5l2.5-2.5 2.5 2.5-2.5 2.5z" />
                     <circle cx="12" cy="13.5" r="0.9" fill="#dfa938" />
                   </svg>
                 </div>
-                <div className="text-white font-bold text-sm sm:text-[15px] leading-[1.6]">
+                <div className="text-white font-bold text-[11.5px] sm:text-[15px] leading-[1.5]">
                   <p>استفاده از جدیدترین</p>
-                  <p>تکنولوژی‌های روز دنیا</p>
+                  <p>تکنولوژی روز دنیا</p>
                 </div>
               </div>
 
-              {/* Vertical Divider 2 */}
-              <div className="hidden lg:block w-[1px] h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent shrink-0"></div>
-
-              {/* Item 3 (Third from Right / Second from Left): درمان‌های دقیق و با برنامه اختصاصی */}
-              <div className="flex-1 w-full sm:w-auto flex flex-col items-center text-center px-4">
-                <div className="w-14 h-14 rounded-full border-[1.5px] border-[#dfa938] flex items-center justify-center text-[#dfa938] mb-3.5 transition-transform hover:scale-105">
-                  <svg className="w-6 h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
+              {/* Item 3: درمان‌های دقیق و با برنامه اختصاصی */}
+              <div className="flex flex-col items-center text-center p-3 sm:p-0 rounded-2xl bg-white/[0.04] sm:bg-transparent border border-white/[0.06] sm:border-none shadow-xs sm:shadow-none">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border-[1.5px] border-[#dfa938] bg-[#dfa938]/10 sm:bg-transparent flex items-center justify-center text-[#dfa938] mb-2 sm:mb-3.5 transition-transform hover:scale-105 shadow-sm">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
                     <path d="M12 2.5L5 5.5v6.5c0 5 3.5 9 7 10 3.5-1 7-5 7-10V5.5L12 2.5z" />
                     <path d="M12 7.5v8M8.5 9.5l7 4M15.5 9.5l-7 4" strokeWidth="1.6" strokeLinecap="round" />
                   </svg>
                 </div>
-                <div className="text-white font-bold text-sm sm:text-[15px] leading-[1.6]">
+                <div className="text-white font-bold text-[11.5px] sm:text-[15px] leading-[1.5]">
                   <p>درمان‌های دقیق و</p>
                   <p>با برنامه اختصاصی</p>
                 </div>
               </div>
 
-              {/* Vertical Divider 3 */}
-              <div className="hidden lg:block w-[1px] h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent shrink-0"></div>
-
-              {/* Item 4 (Far Left): ارتودنسی برای همه گروه‌های سنی */}
-              <div className="flex-1 w-full sm:w-auto flex flex-col items-center text-center px-4">
-                <div className="w-14 h-14 rounded-full border-[1.5px] border-[#dfa938] flex items-center justify-center text-[#dfa938] mb-3.5 transition-transform hover:scale-105">
-                  <svg className="w-6 h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
+              {/* Item 4: ارتودنسی برای همه گروه‌های سنی */}
+              <div className="flex flex-col items-center text-center p-3 sm:p-0 rounded-2xl bg-white/[0.04] sm:bg-transparent border border-white/[0.06] sm:border-none shadow-xs sm:shadow-none">
+                <div className="w-11 h-11 sm:w-14 sm:h-14 rounded-full border-[1.5px] border-[#dfa938] bg-[#dfa938]/10 sm:bg-transparent flex items-center justify-center text-[#dfa938] mb-2 sm:mb-3.5 transition-transform hover:scale-105 shadow-sm">
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 stroke-[#dfa938] fill-none stroke-[1.8]" viewBox="0 0 24 24">
                     <path d="M7 4C4.5 4 3 6 3 9c0 3.5 1.5 7 2.5 11 .6 2.2 1.8 2.5 2.5 2.5s1.5-2 2-4c.4-1.6 1.2-1.8 2-1.8s1.6.2 2 1.8c.5 2 1.3 4 2 4s1.9-.3 2.5-2.5c1-4 2.5-7.5 2.5-11 0-3-1.5-5-4-5-1.5 0-2.2.8-3 1.5-.8-.7-1.5-1.5-3-1.5z" />
                     <rect x="9.5" y="8" width="5" height="4" rx="1" />
                     <line x1="6.5" y1="10" x2="17.5" y2="10" />
                   </svg>
                 </div>
-                <div className="text-white font-bold text-sm sm:text-[15px] leading-[1.6]">
+                <div className="text-white font-bold text-[11.5px] sm:text-[15px] leading-[1.5]">
                   <p>ارتودنسی برای</p>
-                  <p>همه گروه‌های سنی</p>
+                  <p>تمام گروه‌های سنی</p>
                 </div>
               </div>
             </div>
@@ -990,19 +1260,19 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                 <article 
                   key={srv.id}
                   onClick={() => openBookingModalWithPreselect(undefined, srv.title)}
-                  className="bg-white border border-[#edf2f6] rounded-[22px] py-6 px-3 sm:px-3.5 text-center min-h-[195px] sm:min-h-[205px] shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_8px_25px_rgba(5,38,63,0.08)] hover:-translate-y-1.5 hover:border-[#d4e4f0] transition-all duration-300 cursor-pointer group flex flex-col items-center justify-between"
+                  className="bg-white border border-[#edf2f6] rounded-[20px] sm:rounded-[22px] p-3 sm:p-4 text-center aspect-square shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_8px_25px_rgba(5,38,63,0.08)] hover:-translate-y-1.5 hover:border-[#d4e4f0] transition-all duration-300 cursor-pointer group flex flex-col items-center justify-center active:scale-95"
                 >
                   {/* Clean Dental Line Icon */}
-                  <div className="w-12 h-12 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mb-2">
                     {srv.svg}
                   </div>
 
                   {/* Text Details */}
-                  <div className="mt-2 w-full">
-                    <b className="text-[13px] sm:text-[13.5px] font-black block text-[#05263f] leading-snug group-hover:text-[#0a4b7a] transition-colors">
+                  <div className="w-full">
+                    <b className="text-[12px] sm:text-[13px] font-black block text-[#05263f] leading-snug group-hover:text-[#0a4b7a] transition-colors">
                       {srv.title}
                     </b>
-                    <span className="text-[10px] sm:text-[10.5px] text-[#7e94a5] block mt-1.5 font-normal leading-tight">
+                    <span className="text-[9.5px] sm:text-[10px] text-[#7e94a5] block mt-1 font-medium leading-tight">
                       {srv.subtitle}
                     </span>
                   </div>
@@ -1221,8 +1491,8 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                 <ChevronRight className="w-4 h-4" />
               </button>
 
-              {/* 4 Cards Grid (RTL layout matching the 4 reference cards) */}
-              <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-4.5">
+              {/* 4 Cards Grid - 2x2 on Mobile, 4-col on Desktop */}
+              <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4.5">
                 {casesData.map((item, idx) => (
                   <article 
                     key={item.id || idx}
@@ -1298,11 +1568,12 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
             </div>
 
             {/* Testimonials Row with Side Navigation Arrows */}
-            <div className="relative flex items-center">
+            <div className="relative">
               {/* Left Arrow Button */}
               <button 
                 type="button"
-                aria-label="نظر قبلی"
+                onClick={() => scrollContainer(testimonialsScrollRef, 'left')}
+                aria-label="نظر بعدی"
                 className="hidden md:flex absolute -left-4 lg:-left-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full border border-[#dbe6ee] bg-white text-[#05263f] items-center justify-center shadow-md hover:bg-[#05263f] hover:text-white transition-all cursor-pointer select-none"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -1311,14 +1582,18 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
               {/* Right Arrow Button */}
               <button 
                 type="button"
-                aria-label="نظر بعدی"
+                onClick={() => scrollContainer(testimonialsScrollRef, 'right')}
+                aria-label="نظر قبلی"
                 className="hidden md:flex absolute -right-4 lg:-right-5 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full border border-[#dbe6ee] bg-white text-[#05263f] items-center justify-center shadow-md hover:bg-[#05263f] hover:text-white transition-all cursor-pointer select-none"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
 
-              {/* 3 Testimonial Cards in Exact RTL Order from Reference Screenshot */}
-              <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5">
+              {/* 3 Testimonial Cards - Horizontal Drag/Swipe on mobile, 3-Col Grid on Desktop */}
+              <div 
+                ref={testimonialsScrollRef}
+                className="w-full flex md:grid md:grid-cols-3 gap-4 md:gap-5 overflow-x-auto md:overflow-visible pb-4 pt-1 px-4 -mx-4 md:px-0 md:mx-0 snap-x snap-mandatory scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+              >
                 {[
                   {
                     id: 1,
@@ -1341,7 +1616,7 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                 ].map((item) => (
                   <article 
                     key={item.id}
-                    className="bg-white border border-[#edf2f6] rounded-[24px] p-6 sm:p-7 shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_8px_25px_rgba(5,38,63,0.08)] hover:-translate-y-1 transition-all duration-300 min-h-[175px] flex flex-col justify-between group"
+                    className="w-[84vw] max-w-[325px] md:w-auto shrink-0 snap-center md:shrink bg-white border border-[#edf2f6] rounded-[24px] p-6 sm:p-7 shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_8px_25px_rgba(5,38,63,0.08)] hover:-translate-y-1 transition-all duration-300 min-h-[175px] flex flex-col justify-between group"
                   >
                     {/* Top Row: Patient Avatar (Right in RTL), 5 Stars (Center), User Icon Badge (Left in RTL) */}
                     <div className="flex items-center justify-between">
@@ -1379,6 +1654,32 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                   </article>
                 ))}
               </div>
+
+              {/* Mobile Swipe Indicators & Touch Buttons */}
+              <div className="flex md:hidden items-center justify-between px-1 mt-2 text-[11px] text-[#7890a0]">
+                <div className="flex items-center gap-1.5 font-bold text-[#05263f]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#05263f] animate-pulse"></span>
+                  <span>برای دیدن سایر نظرات به چپ بکشید</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <button 
+                    type="button"
+                    onClick={() => scrollContainer(testimonialsScrollRef, 'left')}
+                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-[#05263f] flex items-center justify-center cursor-pointer active:scale-90"
+                    aria-label="نظر بعدی"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" />
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => scrollContainer(testimonialsScrollRef, 'right')}
+                    className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-[#05263f] flex items-center justify-center cursor-pointer active:scale-90"
+                    aria-label="نظر قبلی"
+                  >
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -1410,13 +1711,17 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
               </div>
             </div>
 
-            {/* 5 Cards Row in Exact Screenshot LTR Alignment (1 on left, 5 on right) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4" dir="ltr">
+            {/* 5 Cards Row - Horizontally swipeable/draggable on mobile, Grid on tablet/desktop */}
+            <div 
+              ref={clinicsScrollRef}
+              className="flex sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-4 overflow-x-auto sm:overflow-visible px-4 -mx-4 sm:px-0 sm:mx-0 pb-4 pt-1 snap-x snap-mandatory scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:[direction:ltr]" 
+              dir="rtl"
+            >
               {clinicsData.map((clinic) => (
                 <article 
                   key={clinic.id} 
                   dir="rtl"
-                  className="bg-white border border-[#edf2f6] rounded-[22px] p-2.5 sm:p-3 shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_10px_26px_rgba(5,38,63,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between text-center group"
+                  className="w-[74vw] max-w-[270px] sm:w-auto shrink-0 snap-center sm:shrink bg-white border border-[#edf2f6] rounded-[22px] p-2.5 sm:p-3 shadow-[0_4px_16px_rgba(5,38,63,0.03)] hover:shadow-[0_10px_26px_rgba(5,38,63,0.08)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between text-center group"
                 >
                   <div>
                     {/* Clinic Panoramic Image */}
@@ -1462,6 +1767,32 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
                   </div>
                 </article>
               ))}
+            </div>
+
+            {/* Mobile Horizontal Swipe Indicator & Nav Buttons */}
+            <div className="flex sm:hidden items-center justify-between px-1 mt-2 text-[11px] text-[#7890a0]">
+              <div className="flex items-center gap-1.5 font-bold text-[#05263f]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#05263f] animate-pulse"></span>
+                <span>برای مشاهده سایر شعبه‌ها به چپ بکشید</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <button 
+                  type="button"
+                  onClick={() => scrollContainer(clinicsScrollRef, 'left')}
+                  className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-[#05263f] flex items-center justify-center cursor-pointer active:scale-90"
+                  aria-label="مرکز بعدی"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button 
+                  type="button"
+                  onClick={() => scrollContainer(clinicsScrollRef, 'right')}
+                  className="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 text-[#05263f] flex items-center justify-center cursor-pointer active:scale-90"
+                  aria-label="مرکز قبلی"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -1696,30 +2027,45 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
         </div>
       </footer>
 
-      {/* Floating CTA Bar for Mobile View */}
-      <div className="fixed bottom-4 left-4 right-4 z-40 flex gap-2 sm:hidden shadow-2xl">
-        <button 
-          className="btn-custom btn-primary-custom flex-1 text-xs py-3 rounded-xl shadow-lg" 
-          onClick={() => openBookingModalWithPreselect()}
+      {/* Professional Mobile Bottom Action Dock */}
+      <div className="fixed bottom-0 inset-x-0 z-40 sm:hidden bg-[#05263f]/95 backdrop-blur-xl border-t border-white/15 px-3 py-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_rgba(0,0,0,0.35)] flex items-center justify-between gap-2">
+        {/* Direct Call Button */}
+        <a 
+          href="tel:02122886900"
+          className="flex flex-col items-center justify-center px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold transition-all active:scale-95 shrink-0 min-w-[54px] min-h-[44px]"
         >
-          رزرو نوبت رایگان
+          <Phone className="w-4 h-4 text-[#f0bc3f] mb-0.5" />
+          <span>تماس</span>
+        </a>
+
+        {/* Primary Booking Button */}
+        <button 
+          type="button"
+          onClick={() => openBookingModalWithPreselect()}
+          className="flex-1 bg-gradient-to-r from-[#f0bc3f] via-[#e5b745] to-[#f0bc3f] hover:from-[#e4b036] hover:to-[#dfa938] text-[#05263f] font-black text-xs py-3 rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer min-h-[44px]"
+        >
+          <Calendar className="w-4 h-4 text-[#05263f] shrink-0" />
+          <span>رزرو نوبت رایگان</span>
         </button>
+
+        {/* Treatment Plan Button */}
         <button 
-          className="btn-custom btn-dark-custom flex-1 text-xs py-3 rounded-xl shadow-lg"
-          onClick={() => openBookingModalWithPreselect()}
+          type="button"
+          onClick={() => openBookingModalWithPreselect('طرح درمان')}
+          className="flex-1 bg-[#8be022] hover:bg-[#7ecc1b] text-[#05263f] font-black text-xs py-3 rounded-xl shadow-md flex items-center justify-center gap-1.5 transition-all active:scale-95 cursor-pointer min-h-[44px]"
         >
-          مشاوره اختصاصی
+          <span>طرح درمان</span>
         </button>
       </div>
 
       {/* Booking / Consultation Modal */}
       {modalOpen && (
         <div 
-          className="fixed inset-0 bg-[#031623]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-[#031623]/70 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
           onClick={() => setModalOpen(false)}
         >
           <div 
-            className="w-full max-w-[520px] bg-white rounded-[24px] p-7 relative shadow-2xl animate-in zoom-in-95 duration-200"
+            className="w-full max-w-[520px] bg-white rounded-t-[28px] sm:rounded-[24px] p-6 sm:p-7 relative shadow-2xl animate-in slide-in-from-bottom-4 sm:zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button 
