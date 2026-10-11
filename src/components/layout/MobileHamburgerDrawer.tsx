@@ -397,6 +397,17 @@ export const MobileHamburgerDrawer: React.FC<MobileHamburgerDrawerProps> = ({
           icon: <Search className="w-4 h-4" />,
           iconColor: 'bg-amber-50 text-amber-600',
           keywords: ['پیگیری', 'کد رهگیری', 'استعلام', 'وضعیت نوبت']
+        },
+        {
+          id: 'about-us',
+          title: 'درباره‌ی ما و اطلاعات تماس',
+          subtitle: 'پیشینه علمی، آدرس شعب و راه‌های ارتباطی',
+          path: '/about',
+          icon: <Heart className="w-4 h-4" />,
+          iconColor: 'bg-rose-50 text-rose-600',
+          badge: 'اطلاعات تماس',
+          badgeColor: 'bg-rose-600 text-white',
+          keywords: ['درباره ما', 'درباره', 'تماس', 'تماس با ما', 'ارتباط', 'آدرس', 'تلفن', 'شعب']
         }
       ]
     },

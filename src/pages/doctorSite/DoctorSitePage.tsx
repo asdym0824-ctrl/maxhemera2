@@ -45,6 +45,7 @@ import { MOCK_DISEASES } from '../../data/mockData';
 import { bookingIntentService } from '../../services/bookingIntentService';
 import { setSeoMetaData } from '../../utils/seoUtils';
 import { DrSaeidGhoreishiLanding } from './DrSaeidGhoreishiLanding';
+import { DrSaeidGhoreishiAboutPage } from './DrSaeidGhoreishiAboutPage';
 
 export const DoctorSitePage: React.FC = () => {
   const params = useParams<{ doctorSlug: string; '*'?: string }>();
@@ -405,14 +406,25 @@ export const DoctorSitePage: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Dedicated bespoke landing page for Dr. Saeid Ghoreishi (Orthodontics Specialist)
-  if (doctor.slug === 'dr-saeid-ghoreishi' && (subpage === 'home' || !subpage)) {
-    return (
-      <DrSaeidGhoreishiLanding 
-        doctor={doctor} 
-        onOpenWizard={() => handleOpenBooking()} 
-      />
-    );
+  // Dedicated bespoke pages for Dr. Saeid Ghoreishi (Orthodontics Specialist)
+  if (doctor.slug === 'dr-saeid-ghoreishi') {
+    if (subpage === 'about' || subpage === 'about-us' || subpage === 'contact') {
+      return (
+        <DrSaeidGhoreishiAboutPage 
+          doctor={doctor} 
+          onOpenBooking={() => handleOpenBooking()} 
+          onBackToHome={() => handleNavigateSubpage('home')}
+        />
+      );
+    }
+    if (subpage === 'home' || !subpage) {
+      return (
+        <DrSaeidGhoreishiLanding 
+          doctor={doctor} 
+          onOpenWizard={() => handleOpenBooking()} 
+        />
+      );
+    }
   }
 
   return (

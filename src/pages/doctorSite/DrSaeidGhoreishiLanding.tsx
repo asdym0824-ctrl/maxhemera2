@@ -28,7 +28,9 @@ import {
   Sparkles,
   Award,
   Camera,
-  BadgeCheck
+  BadgeCheck,
+  HeartHandshake,
+  Info
 } from 'lucide-react';
 import clinicHeroBg from '../../assets/images/clinic_hero_bg_1790232681712.jpg';
 import drGhorashiSentPhotoBg from '../../assets/images/dr_ghorashi_sent_photo_bg_1790240799866.jpg';
@@ -565,6 +567,13 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
               <span>درباره دکتر قریشی</span>
               <span className="text-[10px] text-slate-400">▼</span>
             </a>
+            <Link 
+              to="/site/dr-saeid-ghoreishi/about"
+              className="inline-flex items-center gap-1.5 text-[#05263f] hover:text-[#0b3b60] font-black transition-colors py-1.5 px-3 rounded-full bg-amber-50/80 hover:bg-amber-100 border border-amber-200 shadow-2xs whitespace-nowrap"
+            >
+              <HeartHandshake className="w-3.5 h-3.5 text-[#b5861b]" />
+              <span>درباره‌ی ما</span>
+            </Link>
             <a 
               href="#services" 
               onClick={(e) => scrollToSection(e, 'services')}
@@ -646,6 +655,19 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
               <span>صفحه اصلی</span>
               <span className="text-xs text-sky-600">خانه</span>
             </a>
+            <Link 
+              to="/site/dr-saeid-ghoreishi/about"
+              onClick={() => setMenuOpen(false)}
+              className="py-3 px-3.5 rounded-xl text-[#05263f] bg-gradient-to-r from-amber-50 via-emerald-50/60 to-sky-50/70 border border-amber-200/80 shadow-xs flex items-center justify-between"
+            >
+              <div className="flex items-center gap-2">
+                <HeartHandshake className="w-4 h-4 text-[#b5861b]" />
+                <span className="font-black text-sm">درباره‌ی ما و اطلاعات تماس</span>
+              </div>
+              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-full">
+                آدرس، تلفن و فرم
+              </span>
+            </Link>
             <a 
               href="#about" 
               onClick={(e) => { setMenuOpen(false); scrollToSection(e, 'about'); }}
@@ -715,6 +737,19 @@ export const DrSaeidGhoreishiLanding: React.FC<DrSaeidGhoreishiLandingProps> = (
           {/* A. Mobile Clinical VIP Story Highlights Carousel */}
           <div className="px-4 mb-4">
             <div className="flex items-center gap-3.5 overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-1">
+              {/* Story 0: درباره ما و تماس */}
+              <Link 
+                to="/site/dr-saeid-ghoreishi/about"
+                className="flex flex-col items-center gap-1 shrink-0 group active:scale-95 transition-transform"
+              >
+                <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-[#05263f] via-[#dfa938] to-[#8be022] shadow-sm">
+                  <div className="w-full h-full rounded-full border-2 border-white bg-[#05263f] flex items-center justify-center text-white">
+                    <HeartHandshake className="w-5 h-5 text-[#8be022]" />
+                  </div>
+                </div>
+                <span className="text-[10px] font-bold text-[#05263f]">درباره‌ی ما</span>
+              </Link>
+
               {/* Story 1: قبل و بعد */}
               <a 
                 href="#results" 

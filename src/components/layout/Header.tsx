@@ -1328,6 +1328,17 @@ export const Header: React.FC<HeaderProps> = ({
             پاراکلینیک
           </Link>
 
+          <Link
+            to="/about"
+            className={`inline-flex items-center justify-center shrink-0 whitespace-nowrap px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer border box-border ${
+              isCurrentPathActive('/about') || isCurrentPathActive('/about-us')
+                ? 'bg-blue-50 text-blue-700 font-semibold border-blue-200/80 shadow-2xs'
+                : 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-100/70 hover:border-slate-200/60'
+            }`}
+          >
+            درباره‌ی ما
+          </Link>
+
           {/* Desktop More Menu Dropdown for Telemedicine & Health Magazine */}
           <div className="relative shrink-0">
             <button
@@ -1391,6 +1402,24 @@ export const Header: React.FC<HeaderProps> = ({
                       <span className="text-[9px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-md font-bold">ویژه مراکز</span>
                     </div>
                     <div className="text-[10px] text-slate-400 font-normal">هویت بصری، ساب‌دامنه همرا و CRM</div>
+                  </div>
+                </Link>
+
+                <div className="border-t border-slate-100 my-1"></div>
+
+                <Link
+                  to="/about"
+                  onClick={() => setDesktopMoreMenuOpen(false)}
+                  className={`w-full text-right px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition-colors ${
+                    isCurrentPathActive('/about') || isCurrentPathActive('/about-us') ? 'bg-blue-50 text-blue-700 font-bold' : 'text-slate-700 hover:bg-slate-50'
+                  }`}
+                >
+                  <Heart className="w-4 h-4 text-rose-500" />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span>درباره‌ی ما و اطلاعات تماس</span>
+                    </div>
+                    <div className="text-[10px] text-slate-400 font-normal">شعب، تلفن‌ها و راه‌های ارتباطی</div>
                   </div>
                 </Link>
               </div>
