@@ -10,6 +10,7 @@ import {
   Stethoscope, 
   ArrowLeft, 
   ChevronLeft,
+  ChevronRight,
   Activity,
   Calendar,
   PhoneCall,
@@ -47,6 +48,8 @@ import { ClinicalCornerAccents } from '../components/common/medicalPattern/Clini
 import { MedicalVectorPattern } from '../components/common/medicalPattern/MedicalVectorPattern';
 import { MobileDoctoretoReviews, PatientReview } from '../components/reviews/MobileDoctoretoReviews';
 import { MobileDoctoretoArticles } from '../components/health/MobileDoctoretoArticles';
+import { MedicalCentersHorizontalSection } from '../components/home/MedicalCentersHorizontalSection';
+import { InPersonBookingModal } from '../components/branches/InPersonBookingModal';
 
 interface HomePageProps {
   doctors: Doctor[];
@@ -82,6 +85,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [branches, setBranches] = useState<ClinicBranch[]>([]);
   const [selectedInsurance, setSelectedInsurance] = useState('all');
+  const [bookingBranch, setBookingBranch] = useState<ClinicBranch | null>(null);
 
   const availableServiceCategories = useMemo(() => {
     const cats = new Set<string>();
@@ -99,6 +103,51 @@ export const HomePage: React.FC<HomePageProps> = ({
   }, [services, selectedServiceCategory]);
 
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const quickChipsRef = useRef<HTMLDivElement>(null);
+  const [isChipDragging, setIsChipDragging] = useState(false);
+  const chipStartXRef = useRef(0);
+  const chipLastClientXRef = useRef(0);
+  const chipHasDraggedRef = useRef(false);
+
+  const handleChipMouseDown = (e: React.MouseEvent) => {
+    if (!quickChipsRef.current) return;
+    setIsChipDragging(true);
+    chipHasDraggedRef.current = false;
+    chipStartXRef.current = e.clientX;
+    chipLastClientXRef.current = e.clientX;
+  };
+
+  const handleChipMouseMove = (e: React.MouseEvent) => {
+    if (!isChipDragging || !quickChipsRef.current) return;
+    const deltaTotal = Math.abs(e.clientX - chipStartXRef.current);
+    if (deltaTotal > 5) {
+      chipHasDraggedRef.current = true;
+    }
+    const movement = e.clientX - chipLastClientXRef.current;
+    chipLastClientXRef.current = e.clientX;
+    // In RTL, dragging mouse rightwards pulls items from left, so scrollBy negative left
+    quickChipsRef.current.scrollBy({ left: -movement, behavior: 'auto' });
+  };
+
+  const handleChipMouseUp = () => {
+    setIsChipDragging(false);
+    setTimeout(() => {
+      chipHasDraggedRef.current = false;
+    }, 50);
+  };
+
+  const handleChipMouseLeave = () => {
+    setIsChipDragging(false);
+    setTimeout(() => {
+      chipHasDraggedRef.current = false;
+    }, 50);
+  };
+
+  const handleChipWheel = (e: React.WheelEvent) => {
+    if (quickChipsRef.current && Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      quickChipsRef.current.scrollBy({ left: e.deltaY, behavior: 'auto' });
+    }
+  };
 
   useEffect(() => {
     setSeoMetaData(
@@ -733,14 +782,39 @@ export const HomePage: React.FC<HomePageProps> = ({
                 )}
               </form>
 
-              {/* Quick Search Chips - Mobile Horizontal Swipe */}
-              <div className="flex items-center gap-1.5 sm:gap-2 pt-1 text-xs overflow-x-auto no-scrollbar justify-start sm:justify-center py-1 -mx-2 px-2 sm:mx-0 sm:px-0">
-                <span className="text-slate-400 font-medium hidden sm:inline shrink-0">جستجوی پرتکرار:</span>
+              {/* Quick Search Chips - Single-line Horizontal Drag & Scroll on Mobile, Full Clean Center Row on Tablet & Laptop */}
+              <div
+                ref={quickChipsRef}
+                onWheel={handleChipWheel}
+                onMouseDown={handleChipMouseDown}
+                onMouseMove={handleChipMouseMove}
+                onMouseUp={handleChipMouseUp}
+                onMouseLeave={handleChipMouseLeave}
+                className={`w-full max-w-2xl md:max-w-4xl lg:max-w-5xl xl:max-w-6xl mx-auto flex items-center flex-nowrap gap-1.5 sm:gap-2 pt-1.5 pb-1 text-xs overflow-x-auto no-scrollbar scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain touch-pan-x px-2 sm:px-3 md:px-0 select-none justify-start md:justify-center transition-all ${
+                  isChipDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
+                }`}
+                style={{
+                  WebkitOverflowScrolling: 'touch',
+                  scrollBehavior: isChipDragging ? 'auto' : 'smooth'
+                }}
+              >
+                {/* Repetitive Search Label */}
+                <div className="flex items-center gap-1.5 text-slate-300 font-medium text-[11px] sm:text-xs shrink-0 whitespace-nowrap bg-white/10 px-2.5 py-1 sm:py-1.5 rounded-xl border border-white/10 select-none backdrop-blur-xs">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-400 shrink-0 animate-pulse" />
+                  <span className="hidden sm:inline">جستجوی پرتکرار:</span>
+                  <span className="sm:hidden">پرتکرار:</span>
+                </div>
+
+                {/* Chips */}
                 {quickChips.map((chip, idx) => (
                   <button
                     key={idx}
-                    onClick={() => navigate(`/doctors?search=${encodeURIComponent(chip.query)}`)}
-                    className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-slate-200 rounded-xl border border-white/10 transition-colors cursor-pointer text-xs shrink-0 whitespace-nowrap active:scale-95"
+                    type="button"
+                    onClick={() => {
+                      if (chipHasDraggedRef.current) return;
+                      navigate(`/doctors?search=${encodeURIComponent(chip.query)}`);
+                    }}
+                    className="px-2.5 sm:px-3 py-1 sm:py-1.5 bg-white/10 hover:bg-white/20 active:bg-blue-600/40 text-slate-200 hover:text-white rounded-xl border border-white/10 hover:border-white/25 transition-all cursor-pointer text-xs font-medium shrink-0 whitespace-nowrap active:scale-95 select-none shadow-2xs"
                   >
                     {chip.label}
                   </button>
@@ -1280,6 +1354,12 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <span>(حذف فیلتر تخصص)</span>
               </button>
             )}
+            {/* Mobile Horizontal Swipe Indicator Cue */}
+            <span className="md:hidden text-[10px] text-blue-700 font-bold bg-blue-50/90 border border-blue-200/70 px-2 py-0.5 rounded-lg flex items-center gap-1 select-none">
+              <ChevronRight className="w-2.5 h-2.5 text-blue-400" />
+              <span>ورق بزنید</span>
+              <ChevronLeft className="w-2.5 h-2.5 text-blue-500 animate-pulse" />
+            </span>
           </div>
 
           {/* View Mode Switcher: Card vs Compact List */}
@@ -1310,29 +1390,71 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
         </div>
 
-        {/* Doctor List (Card or Compact) */}
+        {/* Doctor List (Card or Compact) - Horizontal Swipe on Mobile, Responsive Grid on Desktop/Tablet */}
         {displayedDoctors.length > 0 ? (
           doctorViewMode === 'grid' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4 md:gap-6 overflow-x-auto md:overflow-visible no-scrollbar scroll-smooth snap-x snap-mandatory pb-3 pt-1 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0">
               {displayedDoctors.map(doc => (
-                <DoctorCard
+                <div 
                   key={doc.id}
-                  doctor={doc}
-                  onSelect={handleSelectDoctor}
-                  onQuickBook={() => handleQuickBookDoctor(doc.slug)}
-                />
+                  className="w-[84vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink flex flex-col"
+                >
+                  <DoctorCard
+                    doctor={doc}
+                    onSelect={handleSelectDoctor}
+                    onQuickBook={() => handleQuickBookDoctor(doc.slug)}
+                  />
+                </div>
               ))}
+
+              {/* Mobile "More Doctors" Card at the end of horizontal swipe */}
+              {displayedDoctors.length < totalMatchingDoctors.length && (
+                <div className="w-[200px] shrink-0 snap-start md:hidden flex flex-col items-center justify-center bg-gradient-to-br from-blue-50/80 via-white to-sky-50/80 rounded-2xl border-2 border-dashed border-blue-200 p-5 text-center space-y-3 shadow-2xs">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-xs">
+                    <ChevronDown className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h4 className="font-extrabold text-xs text-slate-800">
+                      +{totalMatchingDoctors.length - displayedDoctors.length} پزشک دیگر
+                    </h4>
+                    <p className="text-[10px] text-slate-500 mt-1">مشاهده سایر پزشکان آماده ویزیت</p>
+                  </div>
+                  <button
+                    onClick={() => setVisibleDoctorsCount(prev => prev + 4)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl shadow-xs transition-colors cursor-pointer"
+                  >
+                    نمایش ۴ پزشک دیگر
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3 overflow-x-auto md:overflow-visible no-scrollbar scroll-smooth snap-x snap-mandatory pb-3 pt-1 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0">
               {displayedDoctors.map(doc => (
-                <DoctorCompactCard
+                <div 
                   key={doc.id}
-                  doctor={doc}
-                  onSelect={handleSelectDoctor}
-                  onQuickBook={() => handleQuickBookDoctor(doc.slug)}
-                />
+                  className="w-[84vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink flex flex-col"
+                >
+                  <DoctorCompactCard
+                    doctor={doc}
+                    onSelect={handleSelectDoctor}
+                    onQuickBook={() => handleQuickBookDoctor(doc.slug)}
+                  />
+                </div>
               ))}
+
+              {/* Mobile "More Doctors" Card in compact view */}
+              {displayedDoctors.length < totalMatchingDoctors.length && (
+                <div className="w-[180px] shrink-0 snap-start md:hidden flex flex-col items-center justify-center bg-slate-50 rounded-2xl border-2 border-dashed border-slate-300 p-4 text-center space-y-2">
+                  <p className="text-xs font-bold text-slate-700">+{totalMatchingDoctors.length - displayedDoctors.length} پزشک دیگر</p>
+                  <button
+                    onClick={() => setVisibleDoctorsCount(prev => prev + 4)}
+                    className="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-lg border border-blue-200 transition-colors"
+                  >
+                    نمایش بیشتر
+                  </button>
+                </div>
+              )}
             </div>
           )
         ) : (
@@ -1411,6 +1533,37 @@ export const HomePage: React.FC<HomePageProps> = ({
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
       />
+
+      {/* Medical ECG Rhythm Pulse Divider for Partner Centers & Hospitals */}
+      <MedicalPulseDivider label="مراکز درمانی و بیمارستان‌های همکار" />
+
+      {/* ======================================================== */}
+      {/* 7.5. PARTNER MEDICAL CENTERS & HOSPITALS (HORIZONTAL)   */}
+      {/* ======================================================== */}
+      <MedicalCentersHorizontalSection
+        hospitals={MOCK_HOSPITALS}
+        branches={branches}
+        onBookCenter={(center) => {
+          if (center.branchId) {
+            const b = branches.find(branch => branch.id === center.branchId);
+            if (b) {
+              setBookingBranch(b);
+              return;
+            }
+          }
+          navigate(`/doctors?search=${encodeURIComponent(center.name)}`);
+        }}
+      />
+
+      {/* In-Person Booking Modal when center or branch is booked */}
+      {bookingBranch && (
+        <InPersonBookingModal
+          isOpen={!!bookingBranch}
+          onClose={() => setBookingBranch(null)}
+          branch={bookingBranch}
+          doctors={doctors}
+        />
+      )}
 
       {/* Medical ECG Rhythm Pulse Divider */}
       <MedicalPulseDivider label="خدمات تشخیصی و پاراکلینیک" />

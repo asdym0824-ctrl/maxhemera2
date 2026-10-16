@@ -17,6 +17,7 @@ import { ConditionDetailPage } from './pages/ConditionDetailPage';
 import { BranchesPage } from './pages/BranchesPage';
 import { InsuranceCoveragePage } from './pages/InsuranceCoveragePage';
 import { AboutUsPage } from './pages/AboutUsPage';
+import { CareersPage } from './pages/CareersPage';
 import { PatientDashboardPage } from './pages/PatientDashboardPage';
 import { DoctorDashboardPage } from './pages/DoctorDashboardPage';
 import { SecretaryWorkspacePage } from './pages/SecretaryWorkspacePage';
@@ -177,6 +178,10 @@ const MainAppLayout: React.FC = () => {
           <Route path="/about" element={<AboutUsPage doctors={doctors} />} />
           <Route path="/about-us" element={<AboutUsPage doctors={doctors} />} />
           <Route path="/contact" element={<AboutUsPage doctors={doctors} />} />
+
+          {/* Careers & Job Opportunities */}
+          <Route path="/careers" element={<CareersPage />} />
+          <Route path="/jobs" element={<CareersPage />} />
           
           {/* Clinic Branding & Growth Development */}
           <Route path="/clinic-branding" element={<ClinicBrandingPage />} />

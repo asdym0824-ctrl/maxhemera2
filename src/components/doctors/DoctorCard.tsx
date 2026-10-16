@@ -15,7 +15,7 @@ interface DoctorCardProps {
 
 export const DoctorCard: React.FC<DoctorCardProps> = ({ doctor, onSelect, onQuickBook }) => {
   return (
-    <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between gap-3 sm:gap-4 group">
+    <div className="relative overflow-hidden bg-white rounded-2xl border border-slate-200/80 p-4 sm:p-5 shadow-xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between gap-3 sm:gap-4 group h-full">
       {/* Swiss Clinical Corner Crosses */}
       <ClinicalCornerAccents variant="cross" className="opacity-30 group-hover:opacity-75 group-hover:text-blue-500 transition-all" />
 

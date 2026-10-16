@@ -39,7 +39,8 @@ import {
   ShieldAlert,
   DollarSign,
   UserCheck,
-  PieChart
+  PieChart,
+  Briefcase
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Doctor, Appointment } from '../../types';
@@ -408,6 +409,17 @@ export const MobileHamburgerDrawer: React.FC<MobileHamburgerDrawerProps> = ({
           badge: 'اطلاعات تماس',
           badgeColor: 'bg-rose-600 text-white',
           keywords: ['درباره ما', 'درباره', 'تماس', 'تماس با ما', 'ارتباط', 'آدرس', 'تلفن', 'شعب']
+        },
+        {
+          id: 'careers-action',
+          title: 'فرصت‌های شغلی (استخدام)',
+          subtitle: 'سئو، کال سنتر، فروش، پشتیبانی، دیجیتال مارکتینگ',
+          path: '/careers',
+          icon: <Briefcase className="w-4 h-4" />,
+          iconColor: 'bg-emerald-50 text-emerald-600',
+          badge: 'استخدام',
+          badgeColor: 'bg-emerald-600 text-white',
+          keywords: ['فرصت های شغلی', 'شغل', 'استخدام', 'کاریابی', 'رزومه', 'سئو', 'کال سنتر', 'فروش', 'پشتیبانی', 'دیجیتال مارکتینگ']
         }
       ]
     },

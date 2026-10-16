@@ -16,7 +16,7 @@ export const DoctorCompactCard: React.FC<DoctorCompactCardProps> = ({
   return (
     <div 
       onClick={() => onSelect(doctor.slug)}
-      className="bg-white rounded-2xl border border-slate-200/85 p-3 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer active:scale-[0.99] flex items-center justify-between gap-3 group"
+      className="bg-white rounded-2xl border border-slate-200/85 p-3 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all cursor-pointer active:scale-[0.99] flex items-center justify-between gap-3 group h-full"
       dir="rtl"
     >
       {/* Left: Avatar and Bio */}
